@@ -1,16 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { debounce } from 'lodash';
-import prettier from 'prettier/standalone';
-import { format } from 'prettier/standalone';
-import babel from 'prettier/parser-babel';
-import parseHtml from 'prettier/parser-html';
-import postcss from 'prettier/parser-postcss';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { html } from '@codemirror/lang-html';
 import { css } from '@codemirror/lang-css';
-import { oneDark } from '@codemirror/theme-one-dark';
-import { StreamLanguage } from '@codemirror/language';
 import { EditorView } from '@codemirror/view'
 import { lineNumbers } from '@codemirror/view'
 import JsonView from '@uiw/react-json-view';
@@ -372,8 +365,8 @@ const Prettifier = ({ initialState }) => {
 
   return (
     <div data-component="Prettifier" className="h-screen flex flex-col gap-4">
-      {/* Header with controls */}
-      <div className="flex flex-wrap items-center gap-4 p-4">
+      {/* Header with controls */} 
+      <div className="flex flex-wrap items-center gap-4 p-4 pb-0">
         <div className="flex flex-wrap items-center gap-4">
           <SelectMenu
             options={FORMAT_OPTIONS}
@@ -409,7 +402,7 @@ const Prettifier = ({ initialState }) => {
       <div className="flex-1 flex flex-col lg:grid lg:grid-cols-2 min-h-0">
         {/* Input panel */}
         <div className="h-[50vh] lg:h-full overflow-y-scroll flex flex-col">
-          <div className="py-3 pl-4 border-b flex gap-3 justify-start items-center sticky top-0 z-0">
+          <div className="py-3 pl-4 border-y-2 border-r-2 flex gap-3 justify-start items-center sticky top-0 z-0">
             <h3 className="font-medium text-gray-700">Input</h3>
             <Tooltip content="Clear input" placement="top" theme="light">
               <button
@@ -423,19 +416,20 @@ const Prettifier = ({ initialState }) => {
               </button>
             </Tooltip>
           </div>
-          <div className="flex-1 min-h-0 overflow-auto border-r">
+          <div className="flex-1 min-h-0 overflow-auto border-r-2 select-text">
             <CodeMirror
               value={input}
               height="100%"
               {...editorConfig}
               onChange={handleInputChange}
+              className='select-text'
             />
           </div>
         </div>
 
         {/* Output panel */}
-        <div className="h-[50vh] lg:h-full overflow-y-scroll flex flex-col">
-          <div className="py-3 px-4 border-b border-b-2 flex gap-3 items-center sticky top-0 z-0">
+        <div className="h-[50vh] lg:h-full overflow-y-scroll flex flex-col ">
+          <div className="py-3 px-4 border-y-2 border-b-2 flex gap-3 items-center sticky top-0 z-0">
             <h3 className="font-medium text-gray-700">Output</h3>
             {output && (
               <Tooltip content="Copy to clipboard" placement="top" theme="light">
@@ -447,7 +441,7 @@ const Prettifier = ({ initialState }) => {
               </Tooltip>
             )}
           </div>
-          <div className="flex-1 min-h-0 overflow-auto">
+          <div className="flex-1 min-h-0 overflow-auto select-text">
             {renderOutput()}
           </div>
         </div>

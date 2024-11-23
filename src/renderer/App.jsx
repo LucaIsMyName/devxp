@@ -7,14 +7,20 @@ import useAppStore from './store/appStore'
 
 // Import all micro apps
 import Prettifier from './components/microapps/Prettifier'
-import URLPing from './components/microapps/URLPing'
+import DNSChecker from './components/microapps/DNSChecker'
 import WebsiteMonitor from './components/microapps/WebsiteMonitor'
+import URLPing from './components/microapps/URLPing'
+import DBViewer from './components/microapps/DBViewer'
+import WebReader from './components/microapps/WebReader'
 
 // Map of component names to actual components
 const COMPONENT_MAP = {
   Prettifier: Prettifier,
+  DNSChecker: DNSChecker,
+  WebsiteMonitor: WebsiteMonitor,
   URLPing: URLPing,
-  WebsiteMonitor: WebsiteMonitor
+  DBViewer: DBViewer,
+  WebReader: WebReader
 }
 
 // This component syncs the route with the active app state
@@ -33,13 +39,13 @@ const AppContent = () => {
   }, [location, setActiveApp])
 
   return (
-    <div className="flex min-h-screen bg-gray-50/50 overflow-hidden">
+    <div className="flex min-h-screen bg-gray-50/50 overflow-hidden select-none">
       <Sidebar 
         className="w-full sm:max-w-lg" 
         activeApps={MICRO_APPS}
         onAppSelect={(app) => setActiveApp(app.component)}
       />
-      <main className="flex-1 relative ml-[60px] lg:ml-0">
+      <Main className="flex-1 relative ml-[60px] lg:ml-0">
         <Routes>
           <Route 
             path="/" 
@@ -57,7 +63,7 @@ const AppContent = () => {
             />
           ))}
         </Routes>
-      </main>
+      </Main>
     </div>
   )
 }

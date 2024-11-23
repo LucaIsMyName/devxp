@@ -100,7 +100,7 @@ const Sidebar = ({ className, activeApps, onAppSelect }) => {
       )}
 
       {/* Sidebar */}
-      <div
+      <nav
         ref={sidebarRef}
         style={{
           width: isOpen ? width : CLOSED_WIDTH,
@@ -120,7 +120,7 @@ const Sidebar = ({ className, activeApps, onAppSelect }) => {
         <div className="h-full bg-white border-r-2 flex flex-col">
           {/* Collapsed Sidebar Header */}
           {!isOpen && (
-            <div className="flex-shrink-0 h-16 flex items-center justify-center border-b bg-white">
+            <div className="flex-shrink-0 h-16 flex items-center justify-center border-b-2 bg-white">
               <Button
                 onClick={() => setIsOpen(true)}
                 className="mx-auto hover:bg-gray-100 p-2 rounded-lg transition-colors"
@@ -133,7 +133,7 @@ const Sidebar = ({ className, activeApps, onAppSelect }) => {
           {/* Expanded Sidebar Content */}
           {isOpen ? (
             <>
-              <div className="flex-shrink-0 bg-white z-10 px-4 py-4 border-b">
+              <div className="flex-shrink-0 bg-white z-10 px-4 py-4 border-b-2">
                 <div className='flex gap-4 items-center justify-between w-full'>
                   <h1 className="font-bold text-gray-900 text-uppercase select-none">DevXP</h1>
                   <Button
@@ -150,7 +150,7 @@ const Sidebar = ({ className, activeApps, onAppSelect }) => {
                   <Button
                     key={index}
                     title={`Open ${app.name} App`}
-                    className={`w-full ${activeApp === app.component ? 'bg-blue-50 border-blue-500' : ''}`}
+                    className={`w-full ${app.isActive === false ? 'opacity-50':''} ${activeApp === app.component ? 'bg-blue-50 border-blue-500' : ''}`}
                     onClick={() => handleAppClick(app)}
                   >
                     <div className="flex items-start gap-3 w-full">
@@ -202,7 +202,7 @@ const Sidebar = ({ className, activeApps, onAppSelect }) => {
             />
           )}
         </div>
-      </div>
+      </nav>
     </>
   );
 };

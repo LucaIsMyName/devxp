@@ -6,12 +6,12 @@ const Main = ({ children, className }) => {
       data-component="Main" 
       className={`
         ${className}
-        ml-[64px] lg:ml-0 // Always leave space for the collapsed sidebar on desktop
+        ml-[64px] lg:ml-0
       `}
     >
-      <div className="container mx-auto px-4 py-4">
+      <main className=" mx-auto">
         {children}
-      </div>
+      </main>
     </div>
   );
 }

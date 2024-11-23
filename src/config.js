@@ -1,4 +1,4 @@
-import { Code2, GitBranch, Activity } from 'lucide-react';
+import { Code2, Network, Activity, Zap, Database, Notebook } from 'lucide-react';
 
 export const MICRO_APPS = [
   {
@@ -9,10 +9,17 @@ export const MICRO_APPS = [
     isActive: true
   },
   {
+    name: 'DNS Checker',
+    description: 'Check website DNS Settings',
+    component: 'DNSChecker',
+    icon: Network,
+    isActive: true
+  },
+  {
     name: 'URL Ping',
-    description: 'Check website availability',
+    description: 'Ping any Website or IP Address',
     component: 'URLPing',
-    icon: GitBranch,
+    icon: Zap,
     isActive: true
   },
   {
@@ -20,7 +27,21 @@ export const MICRO_APPS = [
     description: 'Track website uptime and performance',
     component: 'WebsiteMonitor',
     icon: Activity,
-    isActive: true
+    isActive: false
+  },
+  {
+    name: 'DB Viewer',
+    description: 'View Databases in a tree view or a table view',
+    component: 'DBViewer',
+    icon: Database,
+    isActive: false
+  },
+  {
+    name: 'Web Reader',
+    description: 'Read the contents of any website without distractions',
+    component: 'WebReader',
+    icon: Notebook,
+    isActive: false
   }
 ];
 
