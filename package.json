@@ -1,0 +1,45 @@
+{
+  "name": "devxp",
+  "version": "0.0.001",
+  "description": "a utility app for developers",
+  "type": "module",
+  "main": "src/main/main.js",
+  "scripts": {
+    "dev": "vite",
+    "start": "concurrently -k \"cross-env BROWSER=none npm run dev\" \"npm run electron\"",
+    "electron": "wait-on tcp:5174 && electron .",
+    "build": "vite build",
+    "package": "electron-builder build --mac --win --linux -c.extraMetadata.main=dist/main/main.js"
+  },
+  "author": "LucaIsMyName",
+  "license": "ISC",
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.3",
+    "autoprefixer": "^10.4.20",
+    "concurrently": "^9.1.0",
+    "cross-env": "^7.0.3",
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8",
+    "electron-is-dev": "^3.0.1",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.15",
+    "vite": "^5.4.11",
+    "wait-on": "^8.0.1"
+  },
+  "dependencies": {
+    "@codemirror/lang-css": "^6.3.0",
+    "@codemirror/lang-html": "^6.4.9",
+    "@codemirror/lang-javascript": "^6.2.2",
+    "@codemirror/theme-one-dark": "^6.1.2",
+    "@monaco-editor/react": "^4.6.0",
+    "@tippyjs/react": "^4.2.6",
+    "@uiw/react-codemirror": "^4.23.6",
+    "@uiw/react-json-view": "^2.0.0-alpha.30",
+    "lucide-react": "^0.460.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.0.1",
+    "tippy.js": "^6.3.7",
+    "zustand": "^5.0.1"
+  }
+}
