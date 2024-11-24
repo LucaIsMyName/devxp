@@ -10,39 +10,9 @@ import SelectMenu from '../partials/SelectMenu';
 import Tooltip from '../partials/Tooltip';
 import useAppStore from '../../store/appStore';
 import YAML from 'yaml';
+import { lightTheme } from '../../../config';
 
 // Light theme configuration (same as Prettifier)
-const lightTheme = EditorView.theme({
-  '&': {
-    backgroundColor: 'transparent',
-    height: '100%'
-  },
-  '.cm-gutters': {
-    backgroundColor: '#f8f9fa',
-    color: '#6b7280',
-    border: 'none',
-    borderRight: '1px solid #e5e7eb'
-  },
-  '.cm-line': {
-    padding: '0 4px 0 8px'
-  },
-  '.cm-activeLineGutter': {
-    backgroundColor: '#f3f4f6'
-  },
-  '.cm-activeLine': {
-    backgroundColor: '#f9fafb'
-  },
-  '&.cm-focused .cm-cursor': {
-    borderLeftColor: '#3b82f6'
-  },
-  '&.cm-focused .cm-selectionBackground, .cm-selectionBackground': {
-    backgroundColor: '#dbeafe'
-  },
-  '.cm-content': {
-    caretColor: '#3b82f6',
-    fontFamily: 'Menlo, Monaco, "Courier New", monospace'
-  }
-});
 
 const CONVERSION_MAP = {
   json: ['yaml', 'php'],

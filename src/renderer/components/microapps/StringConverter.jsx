@@ -5,41 +5,42 @@ import { javascript } from '@codemirror/lang-javascript';
 import { EditorView } from '@codemirror/view';
 import { lineNumbers } from '@codemirror/view';
 import SelectMenu from '../partials/SelectMenu';
+import Button from '../partials/Button';
 import Tooltip from '../partials/Tooltip';
 import useAppStore from '../../store/appStore';
-
+import { lightTheme } from '../../../config';
 // Light theme configuration
-const lightTheme = EditorView.theme({
-  '&': {
-    backgroundColor: 'transparent',
-    height: '100%'
-  },
-  '.cm-gutters': {
-    backgroundColor: '#f8f9fa',
-    color: '#6b7280',
-    border: 'none',
-    borderRight: '1px solid #e5e7eb'
-  },
-  '.cm-line': {
-    padding: '0 4px 0 8px'
-  },
-  '.cm-activeLineGutter': {
-    backgroundColor: '#f3f4f6'
-  },
-  '.cm-activeLine': {
-    backgroundColor: '#f9fafb'
-  },
-  '&.cm-focused .cm-cursor': {
-    borderLeftColor: '#3b82f6'
-  },
-  '&.cm-focused .cm-selectionBackground, .cm-selectionBackground': {
-    backgroundColor: '#dbeafe'
-  },
-  '.cm-content': {
-    caretColor: '#3b82f6',
-    fontFamily: 'Menlo, Monaco, "Courier New", monospace'
-  }
-});
+// const lightTheme = EditorView.theme({
+//   '&': {
+//     backgroundColor: 'transparent',
+//     height: '100%'
+//   },
+//   '.cm-gutters': {
+//     backgroundColor: '#f8f9fa',
+//     color: '#6b7280',
+//     border: 'none',
+//     borderRight: '1px solid #e5e7eb'
+//   },
+//   '.cm-line': {
+//     padding: '0 4px 0 8px'
+//   },
+//   '.cm-activeLineGutter': {
+//     backgroundColor: '#f3f4f6'
+//   },
+//   '.cm-activeLine': {
+//     backgroundColor: '#f9fafb'
+//   },
+//   '&.cm-focused .cm-cursor': {
+//     borderLeftColor: '#3b82f6'
+//   },
+//   '&.cm-focused .cm-selectionBackground, .cm-selectionBackground': {
+//     backgroundColor: '#dbeafe'
+//   },
+//   '.cm-content': {
+//     caretColor: '#3b82f6',
+//     fontFamily: '"Geist Mono", Menlo, Monaco, "Courier New", monospace'
+//   }
+// });
 
 // Conversion map showing valid conversions
 const CONVERSION_MAP = {
@@ -364,12 +365,12 @@ const StringConverter = ({ initialState }) => {
           <div className="py-3 px-4 border-b-2 flex items-center justify-between">
             <h3 className="font-medium text-gray-700 font-mono font-semibold">`{fromFormat.label}`</h3>
             <Tooltip content="Copy input" placement="top">
-              <button
+              <Button
                 onClick={() => copyToClipboard(input)}
-                className="p-2 hover:bg-gray-100 rounded"
+                className="py-1 uppercase text-xs rounded"
               >
                 Copy
-              </button>
+              </Button>
             </Tooltip>
           </div>
           <div className="flex-1 min-h-0">
@@ -388,12 +389,12 @@ const StringConverter = ({ initialState }) => {
           <div className="py-3 px-4 border-b-2 flex items-center justify-between">
             <h3 className="font-medium text-gray-700 font-mono font-semibold">`{toFormat.label}`</h3>
             <Tooltip content="Copy output" placement="top">
-              <button
+              <Button
                 onClick={() => copyToClipboard(output)}
-                className="p-2 hover:bg-gray-100 rounded"
+                className="py-1 uppercase text-xs rounded"
               >
                 Copy
-              </button>
+              </Button>
             </Tooltip>
           </div>
           <div className="flex-1 min-h-0">

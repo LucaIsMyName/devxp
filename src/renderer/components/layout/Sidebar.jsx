@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../partials/Button';
+import Logo from '../partials/Logo';
 import useAppStore from '../../store/appStore';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -132,10 +133,9 @@ const Sidebar = ({ className, activeApps, onAppSelect, onDevXPClick }) => {
                 <div className="flex gap-4 items-center justify-between w-full">
                   <Button
                     onClick={onDevXPClick} // Add the click handler here
-                    className="px-4 font-mono uppercase"
+                    className="px-4 "
                   >
-                    <span className="text-blue-600">Dev</span>
-                    <span className="font-light">XP</span>
+                    <Logo />
                   </Button>
                   <Button
                     onClick={() => setIsOpen(false)}
@@ -200,7 +200,7 @@ const Sidebar = ({ className, activeApps, onAppSelect, onDevXPClick }) => {
           {isOpen && !isMobile && (
             <div
               ref={resizeRef}
-              className="absolute top-0 right-0 w-1 h-full cursor-col-resize transition-colors hover:bg-blue-500"
+              className="absolute top-0 right-0 w-1 h-full cursor-col-resize transition-colors hover:bg-blue-500/70 z-50"
               onMouseDown={() => setIsResizing(true)}
             />
           )}

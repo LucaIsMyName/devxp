@@ -201,56 +201,61 @@ const WebReader = ({ initialState }) => {
 
   return (
     <div data-component="WebReader" className="mx-auto p-4">
-      <div className="space-y-4">
-        <form onSubmit={handleSubmit} className="lg:flex space-y-4 lg:space-y-0 gap-4 items-center">
-          <div className="flex-1">
-            <Input
-              type="text"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              placeholder="Enter URL (e.g., example.com/article)"
-              disabled={isLoading}
-              className='w-full'
-            />
-          </div>
+      <div className="">
+        <section className='flex flex-wrap gap-4 items-center'>
+          <form onSubmit={handleSubmit} className="flex-1 flex  lg:space-y-0 gap-4 items-center">
+            <div className="flex-1 relative">
+              <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Input
+                type="text"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                placeholder="Enter URL (e.g., example.com/article)"
+                disabled={isLoading}
+                className='w-full pl-10'
+              />
+            </div>
 
+            <Button
+              type="submit"
+              disabled={isLoading || !url}
+            >
+              {isLoading ? (
+                <span className="flex gap-3 items-center">
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <span className="hidden lg:block">Loading...</span>
+                </span>
+              ) : (
+                <span className="flex gap-3 items-center">
+                  <Globe className="w-5 h-5" />
+                  <span className="hidden lg:block">Get Article</span>
+                </span>
+              )}
+            </Button>
+          </form>
           <Button
-            type="submit"
-            disabled={isLoading || !url}
+            onClick={clearHistory}
+            disabled={recentUrls.length === 0}
+            className={`${recentUrls.length === false ? 'cursor-not-allowed' : ''} flex gap-3 text-red-500 hover:text-red-600 flex items-center gap-1`}
           >
-            {isLoading ? (
-              <span className="flex items-center gap-2">
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Loading...
-              </span>
-            ) : (
-              <span className="flex items-center gap-2">
-                <Globe className="w-4 h-4" />
-                Get Article
-              </span>
-            )}
+            <Trash2 className="w-5 h-5" />
+            <span className="hidden lg:block">Clear</span>
           </Button>
-        </form>
+        </section>
 
         {/* Recent URLs */}
         {recentUrls.length > 0 && (
-          <div className="border-b-2 pb-4 pt-4">
+          <div className="border-2 my-4 px-4 rounded-lg bg-gray-100 pb-4 pt-4">
             <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <History className="w-4 h-4" />
-                Recent
+              <div className="flex items-center text-xs font-mono uppercase gap-2 text-gray-600">
+                <History strokeWidth={2.25} className="text-gray-400 w-4 h-4" />
+                Recent 
               </div>
-              <button
-                onClick={clearHistory}
-                className="text-sm text-red-500 hover:text-red-600 flex items-center gap-1"
-              >
-                <Trash2 className="w-4 h-4" />
-                Clear
-              </button>
+
             </div>
             <div className="flex flex-wrap gap-2">
               {recentUrls.map((recentUrl) => (
-                <button
+                <Button
                   key={recentUrl}
                   onClick={
                     () => {
@@ -260,10 +265,10 @@ const WebReader = ({ initialState }) => {
                       }, 100);
                     }
                   }
-                  className="text-xs bg-gray-100 border-2 px-3 py-1 rounded-full hover:bg-gray-200 transition-colors"
+                  className="text-xs px-3 py-1 rounded-full"
                 >
                   {new URL(recentUrl).hostname}
-                </button>
+                </Button>
               ))}
             </div>
           </div>
@@ -280,12 +285,12 @@ const WebReader = ({ initialState }) => {
         {/* Article Content */}
         {article && (
           <article className="prose prose-slate max-w-4xl mx-auto select-text">
-            <div className="flex items-center gap-3 my-8">
+            <div className="lg:flex  items-start gap-3 my-8">
               {article.favicon && (
                 <img
                   src={article.favicon}
                   alt="Site favicon"
-                  className="w-8 h-8"
+                  className="w-9 h-9 mb-4 lg:mb-0"
                   onError={(e) => e.target.style.display = 'none'}
                 />
               )}
@@ -304,7 +309,7 @@ const WebReader = ({ initialState }) => {
                 rel="noopener noreferrer"
                 className="text-blue-600 underline"
               >
-                {new URL(article.url).hostname}
+                {new URL(article.url).hostname + article.url.split(new URL(article.url).hostname)[1]}
               </a>
             </div>
 

@@ -10,49 +10,7 @@ import JsonView from '@uiw/react-json-view';
 import Tooltip from '../partials/Tooltip';
 import SelectMenu from '../partials/SelectMenu';
 import useAppStore from '../../store/appStore';
-
-const lightTheme = EditorView.theme({
-  '&': {
-    backgroundColor: 'transparent',
-    height: '100%'
-  },
-  '.cm-gutters': {
-    backgroundColor: '#f8f9fa',
-    color: '#6b7280',
-    border: 'none',
-    borderRight: '1px solid #e5e7eb'
-  },
-  '.cm-line': {
-    padding: '0 4px 0 8px'
-  },
-  '.cm-activeLineGutter': {
-    backgroundColor: '#f3f4f6'
-  },
-  '.cm-activeLine': {
-    backgroundColor: '#f9fafb'
-  },
-  '&.cm-focused .cm-cursor': {
-    borderLeftColor: '#3b82f6'
-  },
-  '&.cm-focused .cm-selectionBackground, .cm-selectionBackground': {
-    backgroundColor: '#dbeafe'
-  },
-  '.cm-content': {
-    caretColor: '#3b82f6',
-    fontFamily: 'Menlo, Monaco, "Courier New", monospace'
-  },
-  // Syntax highlighting colors
-  '.cm-keyword': { color: '#2563eb' },
-  '.cm-property': { color: '#059669' },
-  '.cm-string': { color: '#dc2626' },
-  '.cm-number': { color: '#7c3aed' },
-  '.cm-boolean': { color: '#7c3aed' },
-  '.cm-null': { color: '#7c3aed' },
-  '.cm-comment': { color: '#6b7280', fontStyle: 'italic' },
-  '.cm-operator': { color: '#4b5563' },
-  '.cm-punctuation': { color: '#4b5563' },
-  '.cm-bracket': { color: '#4b5563' }
-});
+import { lightTheme } from '../../../config';
 
 const FORMAT_OPTIONS = [
   { value: 'json', label: 'JSON', views: ['pretty', 'tree'], extension: javascript },

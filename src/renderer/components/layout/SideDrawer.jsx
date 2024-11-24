@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import Button from '../partials/Button';
 
-const SideDrawer = ({ children, isOpen, onClose }) => {
+const SideDrawer = ({ title = "Drawer Title", children, isOpen, onClose }) => {
   const [open, setOpen] = useState(isOpen);
 
   useEffect(() => {
@@ -12,7 +12,7 @@ const SideDrawer = ({ children, isOpen, onClose }) => {
   return (
     <div
       data-component="SideDrawer"
-      className={`fixed inset-0 z-50 bg-black bg-opacity-50  ${open ? 'block' : 'hidden'}`}
+      className={`fixed inset-0 backdrop-blur-sm z-50 bg-black bg-opacity-50  ${open ? 'block' : 'hidden'}`}
       onClick={onClose}
     >
       <div
@@ -20,7 +20,7 @@ const SideDrawer = ({ children, isOpen, onClose }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="p-4 border-b-2 flex justify-between items-center">
-          <h2 className="text-lg font-semibold">DevXP Info</h2>
+          <h2 className="text-2xl font-semibold">{title}</h2>
           <Button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-lg"
@@ -28,7 +28,7 @@ const SideDrawer = ({ children, isOpen, onClose }) => {
             <X className="h-5 w-5" />
           </Button>
         </div>
-        <div className="p-4">
+        <div className="p-4 user-select">
           {children}
         </div>
       </div>

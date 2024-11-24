@@ -20,7 +20,7 @@ const Tooltip = ({ children, content, placement = "top", trigger = "mouseenter",
       onClickOutside={onClickOutside}
       animation="shift-away"
       {...props}>
-      <div className="">{children}</div>
+      <div>{children}</div>
     </Tippy>
   );
 };

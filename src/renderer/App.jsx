@@ -7,6 +7,7 @@ import Main from './components/layout/Main'
 import SideDrawer from './components/layout/SideDrawer'
 
 import MdToHtml from './components/partials/MdToHtml'
+import AppInfo from './components/partials/AppInfo'
 
 import useAppStore from './store/appStore'
 
@@ -20,6 +21,7 @@ import WebReader from './components/microapps/WebReader'
 import Converter from './components/microapps/Converter'
 import InAppBrowser from './components/microapps/InAppBrowser'
 import StringConverter from './components/microapps/StringConverter'
+import HashGenerator from './components/microapps/HashGenerator'
 
 import initSqlJs from 'sql.js';
 
@@ -35,6 +37,7 @@ const COMPONENT_MAP = {
   URLPing: URLPing,
   DBViewer: DBViewer,
   WebReader: WebReader,
+  HashGenerator: HashGenerator,
   Converter: Converter,
   InAppBrowser: InAppBrowser,
   StringConverter: StringConverter
@@ -46,6 +49,7 @@ const AppContent = () => {
   const location = useLocation()
   const { setActiveApp } = useAppStore()
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [markdownUrl, setMarkdownUrl] = useState(null);
 
   useEffect(() => {
     const currentPath = location.pathname.split('/').pop()
@@ -57,10 +61,16 @@ const AppContent = () => {
     }
   }, [location, setActiveApp])
 
+  useEffect(() => {
+    if (isDrawerOpen && !markdownUrl) {
+      setMarkdownUrl('https://raw.githubusercontent.com/LucaIsMyName/devxp/refs/heads/main/readme.md');
+    }
+  }, [isDrawerOpen]);
+
   return (
-    <div className="relative flex min-h-screen bg-gray-50/50 overflow-y-scroll h-screen select-none">
-      <Sidebar 
-        className="w-full sm:max-w-lg " 
+    <div className="relative flex min-h-screen bg-gray-50/50 overflow-y-scroll select-none">
+      <Sidebar
+        className="w-full sm:max-w-lg h-screen"
         activeApps={MICRO_APPS}
         onAppSelect={(app) => setActiveApp(app.component)}
         onDevXPClick={() => setIsDrawerOpen(true)}
@@ -68,9 +78,9 @@ const AppContent = () => {
       />
       <Main className="flex-1 relative ml-[72px] lg:ml-0">
         <Routes>
-          <Route 
-            path="/" 
-            element={<Navigate to="/app/prettifier" replace />} 
+          <Route
+            path="/"
+            element={<Navigate to="/app/prettifier" replace />}
           />
           {MICRO_APPS.map((app) => (
             <Route
@@ -85,11 +95,18 @@ const AppContent = () => {
           ))}
         </Routes>
       </Main>
-      <SideDrawer 
-        isOpen={isDrawerOpen} 
+      <SideDrawer
+        title={<div>DevXp Info</div>}
+        isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
       >
-        hi!
+        <AppInfo />
+        {markdownUrl && (
+          <MdToHtml
+            url={markdownUrl}
+            className="w-full overflow-y-auto"
+          />
+        )}
       </SideDrawer>
     </div>
   )

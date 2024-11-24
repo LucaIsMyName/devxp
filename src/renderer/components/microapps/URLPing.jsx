@@ -211,9 +211,9 @@ const URLPing = ({ initialState }) => {
           <Button
             type="button"
             onClick={() => setIsAutoRefresh(!isAutoRefresh)}
-            className={` ${isAutoRefresh ? 'bg-red-500 hover:bg-red-600' : ''}`}
+            className={` ${isAutoRefresh ? 'text-white bg-red-600 hover:bg-red-600' : ''}`}
           >
-            {isAutoRefresh ? <RefreshCwOff className='size-5 text-white' /> : <RefreshCw className='size-5' />}
+            {isAutoRefresh ? <RefreshCwOff className='size-5' /> : <RefreshCw className='size-5' />}
           </Button>
 
           {/* Add Clear History button */}
@@ -221,7 +221,7 @@ const URLPing = ({ initialState }) => {
             <Button
               type="button"
               onClick={clearHistory}
-              className=" text-red-500 hover:bg-red-50"
+              className="text-red-500 hover:bg-red-50"
               title="Clear History"
             >
               <Trash2 className="size-5" />
@@ -260,14 +260,14 @@ const URLPing = ({ initialState }) => {
 
               <div className="flex item.center gap-4 text-sm">
                 <div>
-                  <span className="text-gray-500 text-xs sm:text-base "></span>
+                  <span className="text-gray-500 text-xs "></span>
                   <span className={`uppercase font-mono text-xs ${ping.success ? 'bg-green-50 border-green-500' : 'bg-red-50 border-red-500'} border-2 px-2 rounded-full  ${getStatusColor(ping.success, ping.error)}`}>
                     {ping.error || (ping.success ? 'Connected' : 'Failed')}
                   </span>
                 </div>
 
                 <div>
-                  <span className="text-gray-500 text-xs sm:text-base "></span>
+                  <span className="text-gray-500 text-xs "></span>
                   <span className="font-mono text-xs px-2 border-2 rounded-full uppercase">
                     {ping.responseTime}ms
                   </span>
@@ -295,7 +295,7 @@ const URLPing = ({ initialState }) => {
           ))}
 
           {pingHistory.length === 0 && !isPinging && (
-            <div className="text-center text-gray-500 py-8">
+            <div className=" text-gray-500 pb-4">
               Enter a URL and click Ping to start monitoring
             </div>
           )}

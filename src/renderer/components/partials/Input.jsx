@@ -21,7 +21,7 @@ const Input = ({
       onBlur={onBlur}
       placeholder={placeholder}
       disabled={disabled}
-      className={`text-left font-mono bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black hover:bg-gray-50 p-2 border-2 rounded-lg shadow-sm bg-white hover:bg-gray-50 rounded-lg border-black/10 border-2 ${className}`}
+      className={`text-left font-mono bg-white focus:outline-none focus:ring-2 focus:ring-blue-500  text-black hover:bg-gray-50 p-2 border-2 rounded-lg shadow-sm bg-white hover:bg-gray-50 rounded-lg border-black/10 border-2 ${className}`}
       {...props}
     />
   );
