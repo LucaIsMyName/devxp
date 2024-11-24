@@ -1,4 +1,4 @@
-import { Code2, Network, Activity,CaseSensitive, SquareMousePointer, Zap, Database, Notebook, ChevronsLeftRightEllipsis } from 'lucide-react';
+import { Code2, Network, Hash, Activity, CaseSensitive, SquareMousePointer, Zap, Database, Notebook, ChevronsLeftRightEllipsis } from 'lucide-react';
 import { EditorView } from '@codemirror/view';
 
 
@@ -43,7 +43,7 @@ export const MICRO_APPS = [
     name: 'Hash Generator',
     description: 'Generate Hash based on an Input String',
     component: 'HashGenerator',
-    icon: Notebook,
+    icon: Hash,
     isActive: true
   },
   {
@@ -74,7 +74,7 @@ export const MICRO_APPS = [
     icon: Database,
     isActive: false
   },
-  
+
 ];
 
 export const UI_CONFIG = {

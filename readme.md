@@ -1,4 +1,4 @@
-# DexXp
+# DevXp
 
 `DevXp` is an al-in-one app for development utilities like DNS, ping, prettifiying, converting data-formts or strings.
 
