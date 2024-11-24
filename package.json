@@ -9,7 +9,8 @@
     "dev": "vite",
     "electron": "wait-on tcp:5174 && electron .",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "binary": "electron-builder"    
   },
   "author": "LucaIsMyName",
   "license": "ISC",
