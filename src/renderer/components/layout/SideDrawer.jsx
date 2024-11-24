@@ -12,14 +12,14 @@ const SideDrawer = ({ children, isOpen, onClose }) => {
   return (
     <div
       data-component="SideDrawer"
-      className={`fixed inset-0 z-50 bg-black bg-opacity-50 ${open ? 'block' : 'hidden'}`}
+      className={`fixed inset-0 z-50 bg-black bg-opacity-50  ${open ? 'block' : 'hidden'}`}
       onClick={onClose}
     >
       <div
-        className={`fixed inset-y-0 right-0 w-full max-w-3xl bg-white shadow-lg`}
+        className={`fixed border-l-2 inset-y-0 right-0 w-full max-w-3xl bg-white shadow-lg`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="p-4 border-b flex justify-between items-center">
+        <div className="p-4 border-b-2 flex justify-between items-center">
           <h2 className="text-lg font-semibold">DevXP Info</h2>
           <Button
             onClick={onClose}

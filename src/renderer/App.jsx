@@ -6,6 +6,8 @@ import Sidebar from './components/layout/Sidebar'
 import Main from './components/layout/Main'
 import SideDrawer from './components/layout/SideDrawer'
 
+import MdToHtml from './components/partials/MdToHtml'
+
 import useAppStore from './store/appStore'
 
 // Import all micro apps
