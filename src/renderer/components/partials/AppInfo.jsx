@@ -28,7 +28,7 @@ const AppInfo = ({ className }) => {
       </div>
       <h1 className="text-2xl font-bold mb-4">Welcome to DevXP</h1>
       <p className=" mb-4">DevXP is a developer experience platform that helps you build, test, and deploy your applications with ease.</p>
-      <Button asLink={true} href="" className='px-3 border-blue-900'>Get Started</Button>
+      <Button asLink={true} target="_blank" href="https://lucamack.at" className='px-3 border-blue-900'>Get Started</Button>
 
     </div>
   );

@@ -1,4 +1,4 @@
-const { ipcMain, dialog } = require('electron');
+import { ipcMain, dialog } from 'electron';
 
 const registerFileHandlers = () => {
   ipcMain.handle('open-file-dialog', async () => {

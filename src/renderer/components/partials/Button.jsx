@@ -14,7 +14,7 @@ const Button = ({ children, title = '', className = '', asLink, href = "", isAct
 
   return (
     asLink === true ?
-      <a href={href} title={title} className={classNames}>
+      <a target="_blank" href={href} title={title} className={classNames}>
         {children}
       </a>
       :

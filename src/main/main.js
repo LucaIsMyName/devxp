@@ -1,5 +1,5 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
-const path = require('path');
+import { app, BrowserWindow, ipcMain, dialog } from 'electron'
+import path from 'path'
 import { fileURLToPath } from 'url'
 import isDev from 'electron-is-dev'
 
