@@ -5,11 +5,11 @@
   "type": "module",
   "main": "src/main/main.js",
   "scripts": {
+    "start": "concurrently -k \"cross-env BROWSER=none npm run dev\" \"cross-env NODE_ENV=development npm run electron\"",
     "dev": "vite",
-    "start": "concurrently -k \"cross-env BROWSER=none npm run dev\" \"npm run electron\"",
     "electron": "wait-on tcp:5174 && electron .",
     "build": "vite build",
-    "package": "electron-builder build --mac --win --linux -c.extraMetadata.main=dist/main/main.js"
+    "preview": "vite preview"
   },
   "author": "LucaIsMyName",
   "license": "ISC",
@@ -30,16 +30,24 @@
     "@codemirror/lang-css": "^6.3.0",
     "@codemirror/lang-html": "^6.4.9",
     "@codemirror/lang-javascript": "^6.2.2",
+    "@codemirror/lang-xml": "^6.1.0",
+    "@codemirror/lang-yaml": "^6.1.1",
     "@codemirror/theme-one-dark": "^6.1.2",
     "@monaco-editor/react": "^4.6.0",
+    "@tanstack/react-table": "^8.20.5",
     "@tippyjs/react": "^4.2.6",
     "@uiw/react-codemirror": "^4.23.6",
     "@uiw/react-json-view": "^2.0.0-alpha.30",
     "lucide-react": "^0.460.0",
+    "papaparse": "^5.4.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.0.1",
+    "sql-parse": "^0.1.5",
+    "sql.js": "^1.8.0",
     "tippy.js": "^6.3.7",
+    "xml2js": "^0.6.2",
+    "yaml": "^2.6.1",
     "zustand": "^5.0.1"
   }
 }

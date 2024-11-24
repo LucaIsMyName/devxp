@@ -402,7 +402,7 @@ const Prettifier = ({ initialState }) => {
       <div className="flex-1 flex flex-col lg:grid lg:grid-cols-2 min-h-0">
         {/* Input panel */}
         <div className="h-[50vh] lg:h-full overflow-y-scroll flex flex-col">
-          <div className="py-3 pl-4 border-y-2 border-r-2 flex gap-3 justify-start items-center sticky top-0 z-0">
+          <div className="py-3 pl-4 border-b-2 border-r-2 flex gap-3 justify-start items-center sticky top-0 z-0">
             <h3 className="font-medium text-gray-700">Input</h3>
             <Tooltip content="Clear input" placement="top" theme="light">
               <button
@@ -429,7 +429,7 @@ const Prettifier = ({ initialState }) => {
 
         {/* Output panel */}
         <div className="h-[50vh] lg:h-full overflow-y-scroll flex flex-col ">
-          <div className="py-3 px-4 border-y-2 border-b-2 flex gap-3 items-center sticky top-0 z-0">
+          <div className="py-3 px-4 border-b-2 border-b-2 flex gap-3 items-center sticky top-0 z-0">
             <h3 className="font-medium text-gray-700">Output</h3>
             {output && (
               <Tooltip content="Copy to clipboard" placement="top" theme="light">

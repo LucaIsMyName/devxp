@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Tooltip from './Tooltip';
+import Button from './Button';
 
 const SelectMenu = ({ options, value, onChange, tooltip, className }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,11 +22,11 @@ const SelectMenu = ({ options, value, onChange, tooltip, className }) => {
   return (
     <div data-component="SelectMenu" className={`relative w-auto`} ref={dropdownRef}>
       <Tooltip content={tooltip} placement="bottom" theme="light">
-        <button
+        <Button
           onClick={() => setIsOpen(!isOpen)}
-          className={` px-3 py-2 border-2 border-2 rounded-md shadow-sm bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center gap-2 min-w-[120px] w-full justify-between ${className}`}
+          className={` px-3 font-mono py-2 border-2 rounded-lg shadow-sm bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center gap-2 min-w-[120px] w-full justify-between ${className}`}
         >
-          <span className="text-sm truncate ">{selectedOption?.label}</span>
+          <span className=" truncate ">{selectedOption?.label}</span>
           <svg
             className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
             fill="none"
@@ -34,15 +35,15 @@ const SelectMenu = ({ options, value, onChange, tooltip, className }) => {
           >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
-        </button>
+        </Button>
       </Tooltip>
 
       {isOpen && (
-        <div className="absolute z-10 mt-1 w-full bg-white rounded-md shadow-lg border">
+        <div className="absolute z-10 bg-white rounded-lg border-2 overflow-hidden mt-1 w-full ">
           {options.map((option) => (
-            <button
+            <Button
               key={option.value}
-              className={`w-full px-4 py-[0.3em] text-sm text-left hover:bg-gray-100  truncate ${option.value === value ? 'bg-blue-50 text-blue-600' : 'text-gray-700'
+              className={`w-full border-0 border-transparent border-b-2 rounded-none truncate ${option.value === value ? 'bg-gray-100/80 font-semibold' : 'text-gray-700'
                 }`}
               onClick={() => {
                 onChange(option);
@@ -50,7 +51,7 @@ const SelectMenu = ({ options, value, onChange, tooltip, className }) => {
               }}
             >
               {option.label}
-            </button>
+            </Button>
           ))}
         </div>
       )}

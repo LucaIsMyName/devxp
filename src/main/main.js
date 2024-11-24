@@ -1,5 +1,5 @@
-import { app, BrowserWindow } from 'electron'
-import path from 'path'
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const path = require('path');
 import { fileURLToPath } from 'url'
 import isDev from 'electron-is-dev'
 
@@ -7,12 +7,25 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 async function createWindow() {
+  const win = new BrowserWindow({
+    width: 1200,
+    height: 800,
+    webPreferences: {
+      nodeIntegration: true,
+      webviewTag: true,
+      contextIsolation: false
+    }
+  });
+
   const mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
+      webviewTag: true,
+      webSecurity: true,
+      allowRunningInsecureContent: false
     },
   })
 
@@ -35,7 +48,13 @@ async function createWindow() {
   }
 }
 
+app.commandLine.appendSwitch('enable-features', 'WebviewTag');
 app.whenReady().then(createWindow)
+
+ipcMain.handle('dialog:showOpenDialog', async (event, options) => {
+  const result = await dialog.showOpenDialog(options);
+  return result;
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

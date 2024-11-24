@@ -1,9 +1,16 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback , useEffect} from 'react';
 import { debounce } from 'lodash';
-import { Download } from 'lucide-react';
+import { Download, Globe } from 'lucide-react';
+
 import Tooltip from '../partials/Tooltip';
 import SelectMenu from '../partials/SelectMenu';
+import Button from '../partials/Button';
+import Input from '../partials/Input';
+
 import useAppStore from '../../store/appStore';
+
+const STORAGE_KEY = 'dns_checker_state';
+
 
 const DNS_RECORD_TYPES = [
   { value: 'A', label: 'A (IPv4 Address)' },
@@ -23,11 +30,58 @@ const EXPORT_FORMATS = [
 ];
 
 const DNSChecker = ({ initialState }) => {
-  const [url, setUrl] = useState('');
-  const [selectedRecordType, setSelectedRecordType] = useState(DNS_RECORD_TYPES[0]);
+  const [url, setUrl] = useState(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        return parsed.url || '';
+      }
+      return '';
+    } catch {
+      return '';
+    }
+  });
+  const [selectedRecordType, setSelectedRecordType] = useState(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        const savedType = DNS_RECORD_TYPES.find(t => t.value === parsed.recordType);
+        return savedType || DNS_RECORD_TYPES[0];
+      }
+      return DNS_RECORD_TYPES[0];
+    } catch {
+      return DNS_RECORD_TYPES[0];
+    }
+  });
   const [isLoading, setIsLoading] = useState(false);
-  const [results, setResults] = useState(null);
+  const [results, setResults] = useState(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        return parsed.results || null;
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  });
   const [error, setError] = useState(null);
+  useEffect(() => {
+    try {
+      const stateToStore = {
+        url,
+        recordType: selectedRecordType.value,
+        results,
+        lastUpdated: new Date().toISOString()
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToStore));
+    } catch (error) {
+      console.error('Error saving to localStorage:', error);
+    }
+  }, [url, selectedRecordType, results]);
 
   // Function to check DNS records
   const checkDNS = async (domain, recordType) => {
@@ -35,18 +89,31 @@ const DNSChecker = ({ initialState }) => {
     setError(null);
 
     try {
-      // Using Google's DNS API
       const response = await fetch(`https://dns.google/resolve?name=${domain}&type=${recordType.value}`);
       const data = await response.json();
 
-      if (data.Status === 0) { // 0 means success in DNS
-        setResults({
+      if (data.Status === 0) {
+        const newResults = {
           timestamp: new Date().toISOString(),
           domain,
           recordType: recordType.value,
           records: data.Answer || [],
           status: 'success'
-        });
+        };
+        setResults(newResults);
+
+        // Store the results immediately
+        try {
+          const stateToStore = {
+            url: domain,
+            recordType: recordType.value,
+            results: newResults,
+            lastUpdated: new Date().toISOString()
+          };
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToStore));
+        } catch (error) {
+          console.error('Error saving results to localStorage:', error);
+        }
       } else {
         throw new Error('DNS query failed');
       }
@@ -57,6 +124,7 @@ const DNSChecker = ({ initialState }) => {
       setIsLoading(false);
     }
   };
+
 
   // Handle URL submission
   const handleSubmit = (e) => {
@@ -106,38 +174,54 @@ ${results.records.map(record => `- ${record.data} (TTL: ${record.TTL})`).join('\
     a.click();
     window.URL.revokeObjectURL(url);
   };
+  const handleRecordTypeChange = (newType) => {
+    setSelectedRecordType(newType);
+    
+    // If there's a URL, automatically do a new DNS check with the new record type
+    if (url) {
+      const domain = url.replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+      checkDNS(domain, newType);
+    }
+  };
 
   return (
-    <div data-component="DNSChecker" className="h-screen overflow-y-scroll flex flex-col gap-4 ">
+    <div data-component="DNSChecker" className="h-screen overflow-y-scroll flex flex-col">
       {/* Header with controls */}
-      <div className="p-4 border-b-2">
-        <form onSubmit={handleSubmit} className="lg:flex space-y-4 lg:space-y-0 gap-4 items-center ">
-          <div className="flex-1">
-            <input
+      <div className="p-4 pb-0">
+        <form onSubmit={handleSubmit} className="lg:flex space-y-4 lg:space-y-0 gap-4 items-center">
+          <div className="flex-1 relative">
+          <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Input
               type="text"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               placeholder="Enter domain (e.g., example.com)"
-              className="w-full px-2 py-1 border-2 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full pl-10"
             />
           </div>
 
           <SelectMenu
             options={DNS_RECORD_TYPES}
             value={selectedRecordType.value}
-            onChange={setSelectedRecordType}
+            onChange={handleRecordTypeChange}
             tooltip="Select DNS record type"
-            className="w-full lg:w-48 min-w-[160px] "
+            className="w-full lg:w-48 min-w-[160px]"
           />
 
-          <button
+          <Button
             type="submit"
             disabled={isLoading || !url}
-            className="px-3 py-[0.3em] font-semibold border-[rgba(0,0,0,0.2)] border-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
+            className="w-full lg:w-auto px-3 font-semibold border-[rgba(0,0,0,0.2)] rounded disabled:bg-gray-300 disabled:cursor-not-allowed"
           >
             {isLoading ? 'Checking...' : 'Check DNS'}
-          </button>
+          </Button>
         </form>
+
+        {/* {results && (
+          <div className="mt-4 text-xs text-gray-500">
+            Last checked: {new Date(results.timestamp).toLocaleString()}
+          </div>
+        )} */}
       </div>
 
       {/* Results area */}
@@ -149,7 +233,7 @@ ${results.records.map(record => `- ${record.data} (TTL: ${record.TTL})`).join('\
         ) : results ? (
           <div className="p-4">
             <div className="sm:flex justify-between items-center mb-4">
-              <h3 className="font-semibold text-lg truncate">Results for {results.domain}</h3>
+              {/* <h3 className="font-semibold text-lg truncate">Results for {results.domain}</h3> */}
               <div className="flex gap-2">
                 {EXPORT_FORMATS.map(format => (
                   <Tooltip
@@ -158,13 +242,13 @@ ${results.records.map(record => `- ${record.data} (TTL: ${record.TTL})`).join('\
                     placement="top"
                     theme="light"
                   >
-                    <button
+                    <Button
                       onClick={() => exportData(format.value)}
-                      className="p-2 text-gray-600 rounded-lg hover:bg-gray-50 flex items-center text-xs border-2 px-[0.6em] py-[0.3em]"
+                      className="px-4 font-normal font-mono text-gray-600 rounded-lg hover:bg-gray-50 flex items-center border-2 "
                     >
                       <Download className="h-4 w-4" />
                       <span className="ml-1">{format.label}</span>
-                    </button>
+                    </Button>
                   </Tooltip>
                 ))}
               </div>
@@ -177,15 +261,15 @@ ${results.records.map(record => `- ${record.data} (TTL: ${record.TTL})`).join('\
                   className="p-4 border-2 bg-white rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   <div className="sm:flex space-y-1 sm:space-y-0 gap-3 gap-4">
-                    <div className="flex-1  text-xs">
+                    <div className="flex-1  text-xs sm:text-base">
                       <p className="text-gray-500">Name:</p>
-                      <p className="font-mono">{record.name}</p>
+                      <p className="font-mono font-semibold">{record.name}</p>
                     </div>
-                    <div className="flex-1 text-xs max-w-64">
+                    <div className="flex-1 text-xs sm:text-base max-w-64">
                       <p className="text-gray-500">TTL:</p>
                       <p className="font-mono">{record.TTL}s</p>
                     </div>
-                    <div className="flex-1  text-xs">
+                    <div className="flex-1  text-xs sm:text-base">
                       <p className="text-gray-500">Data:</p>
                       <p className="font-mono break-all">{record.data}</p>
                     </div>

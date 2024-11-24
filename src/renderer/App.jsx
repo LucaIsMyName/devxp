@@ -1,8 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { MICRO_APPS } from '../config'
+
 import Sidebar from './components/layout/Sidebar'
 import Main from './components/layout/Main'
+import SideDrawer from './components/layout/SideDrawer'
+
 import useAppStore from './store/appStore'
 
 // Import all micro apps
@@ -12,7 +15,16 @@ import WebsiteMonitor from './components/microapps/WebsiteMonitor'
 import URLPing from './components/microapps/URLPing'
 import DBViewer from './components/microapps/DBViewer'
 import WebReader from './components/microapps/WebReader'
+import Converter from './components/microapps/Converter'
+import InAppBrowser from './components/microapps/InAppBrowser'
+import StringConverter from './components/microapps/StringConverter'
 
+import initSqlJs from 'sql.js';
+
+// In your main app initialization
+// await initSqlJs({
+//   locateFile: file => `https://sql.js.org/dist/${file}`
+// });
 // Map of component names to actual components
 const COMPONENT_MAP = {
   Prettifier: Prettifier,
@@ -20,13 +32,18 @@ const COMPONENT_MAP = {
   WebsiteMonitor: WebsiteMonitor,
   URLPing: URLPing,
   DBViewer: DBViewer,
-  WebReader: WebReader
+  WebReader: WebReader,
+  Converter: Converter,
+  InAppBrowser: InAppBrowser,
+  StringConverter: StringConverter
 }
+
 
 // This component syncs the route with the active app state
 const AppContent = () => {
   const location = useLocation()
   const { setActiveApp } = useAppStore()
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   useEffect(() => {
     const currentPath = location.pathname.split('/').pop()
@@ -39,13 +56,15 @@ const AppContent = () => {
   }, [location, setActiveApp])
 
   return (
-    <div className="flex min-h-screen bg-gray-50/50 overflow-hidden select-none">
+    <div className="relative flex min-h-screen bg-gray-50/50 overflow-y-scroll h-screen select-none">
       <Sidebar 
-        className="w-full sm:max-w-lg" 
+        className="w-full sm:max-w-lg " 
         activeApps={MICRO_APPS}
         onAppSelect={(app) => setActiveApp(app.component)}
+        onDevXPClick={() => setIsDrawerOpen(true)}
+
       />
-      <Main className="flex-1 relative ml-[60px] lg:ml-0">
+      <Main className="flex-1 relative ml-[72px] lg:ml-0">
         <Routes>
           <Route 
             path="/" 
@@ -64,6 +83,12 @@ const AppContent = () => {
           ))}
         </Routes>
       </Main>
+      <SideDrawer 
+        isOpen={isDrawerOpen} 
+        onClose={() => setIsDrawerOpen(false)}
+      >
+        hi!
+      </SideDrawer>
     </div>
   )
 }

@@ -6,23 +6,21 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const MIN_SIDEBAR_WIDTH = 280;
 const MAX_SIDEBAR_WIDTH = 600;
-const CLOSED_WIDTH = 60;
+const CLOSED_WIDTH = 64;
 
-const Sidebar = ({ className, activeApps, onAppSelect }) => {
+const Sidebar = ({ className, activeApps, onAppSelect, onDevXPClick }) => {
   const navigate = useNavigate();
   const activeApp = useAppStore(state => state.activeApp);
   const resizeRef = useRef(null);
   const sidebarRef = useRef(null);
 
-  // Get stored values from localStorage or use defaults
   const [isOpen, setIsOpen] = useState(() => {
     const stored = localStorage.getItem('sidebarState');
     if (stored) {
       const { isOpen } = JSON.parse(stored);
-      // On desktop, default to open even if it was closed last time
       return window.innerWidth >= 1024 ? true : isOpen;
     }
-    return window.innerWidth >= 1024; // Default open on desktop
+    return window.innerWidth >= 1024;
   });
 
   const [width, setWidth] = useState(() => {
@@ -37,12 +35,10 @@ const Sidebar = ({ className, activeApps, onAppSelect }) => {
   const [isResizing, setIsResizing] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
 
-  // Save sidebar state to localStorage
   useEffect(() => {
     localStorage.setItem('sidebarState', JSON.stringify({ isOpen, width }));
   }, [isOpen, width]);
 
-  // Handle resize events and mobile detection
   useEffect(() => {
     const handleResize = () => {
       const isNowMobile = window.innerWidth < 1024;
@@ -59,7 +55,6 @@ const Sidebar = ({ className, activeApps, onAppSelect }) => {
   useEffect(() => {
     const handleMouseMove = (e) => {
       if (!isResizing) return;
-
       const newWidth = e.clientX;
       if (newWidth >= MIN_SIDEBAR_WIDTH && newWidth <= MAX_SIDEBAR_WIDTH) {
         setWidth(newWidth);
@@ -90,7 +85,7 @@ const Sidebar = ({ className, activeApps, onAppSelect }) => {
   };
 
   return (
-    <>
+    <div className="h-full relative">
       {/* Mobile Overlay */}
       {isOpen && isMobile && (
         <div
@@ -99,8 +94,8 @@ const Sidebar = ({ className, activeApps, onAppSelect }) => {
         />
       )}
 
-      {/* Sidebar */}
-      <nav
+      {/* Sidebar Container */}
+      <div
         ref={sidebarRef}
         style={{
           width: isOpen ? width : CLOSED_WIDTH,
@@ -108,49 +103,55 @@ const Sidebar = ({ className, activeApps, onAppSelect }) => {
           maxWidth: isMobile ? '100%' : MAX_SIDEBAR_WIDTH
         }}
         className={`
-          fixed lg:relative
-          z-50
-          h-screen
+          ${isMobile ? 'fixed' : 'sticky'}
+          z-50 h-screen
+          left-0 top-0
+          flex-shrink-0
           transition-width duration-300
-          ${isMobile && isOpen ? 'w-full' : ''}
-          translate-x-0
           ${className}
         `}
       >
+        {/* Sidebar Content */}
         <div className="h-full bg-white border-r-2 flex flex-col">
-          {/* Collapsed Sidebar Header */}
+          {/* Collapsed Header */}
           {!isOpen && (
-            <div className="flex-shrink-0 h-16 flex items-center justify-center border-b-2 bg-white">
+            <div className="flex-shrink-0 h-[64px] flex items-center justify-center border-b-2 bg-white">
               <Button
                 onClick={() => setIsOpen(true)}
-                className="mx-auto hover:bg-gray-100 p-2 rounded-lg transition-colors"
+                className="mx-auto p-0 border-0 rounded-lg"
               >
                 <ChevronRight className="h-5 w-5" />
               </Button>
             </div>
           )}
 
-          {/* Expanded Sidebar Content */}
-          {isOpen ? (
+          {/* Expanded Content */}
+          {isOpen && (
             <>
               <div className="flex-shrink-0 bg-white z-10 px-4 py-4 border-b-2">
-                <div className='flex gap-4 items-center justify-between w-full'>
-                  <h1 className="font-bold text-gray-900 text-uppercase select-none">DevXP</h1>
+                <div className="flex gap-4 items-center justify-between w-full">
+                  <Button
+                    onClick={onDevXPClick} // Add the click handler here
+                    className="px-4 font-mono uppercase"
+                  >
+                    <span className="text-blue-600">Dev</span>
+                    <span className="font-light">XP</span>
+                  </Button>
                   <Button
                     onClick={() => setIsOpen(false)}
-                    className="hover:bg-gray-100 p-2 rounded-lg transition-colors"
+                    className="p-2 rounded-lg transition-colors hover:bg-transparent"
                   >
                     <ChevronLeft className="h-5 w-5" />
                   </Button>
                 </div>
               </div>
 
-              <div className="flex-1 px-4 py-4 space-y-4 overflow-y-auto">
+              <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
                 {activeApps.map((app, index) => (
                   <Button
                     key={index}
                     title={`Open ${app.name} App`}
-                    className={`w-full ${app.isActive === false ? 'opacity-50':''} ${activeApp === app.component ? 'bg-blue-50 border-blue-500' : ''}`}
+                    className={`w-full ${app.isActive === false ? 'opacity-50' : ''} ${activeApp === app.component ? 'bg-blue-50 border-blue-500' : ''}`}
                     onClick={() => handleAppClick(app)}
                   >
                     <div className="flex items-start gap-3 w-full">
@@ -162,10 +163,10 @@ const Sidebar = ({ className, activeApps, onAppSelect }) => {
                       </div>
                       <div className="flex-1 min-w-0 truncate">
                         <h2 className="font-semibold truncate">
-                          <span className='truncate'>{app.name}</span>
+                          <span className="truncate">{app.name}</span>
                         </h2>
-                        <p className='font-normal text-black/60 text-xs truncate'>
-                          <span className='truncate'>{app.description}</span>
+                        <p className="font-normal text-black/60 text-xs truncate">
+                          <span className="truncate">{app.description}</span>
                         </p>
                       </div>
                     </div>
@@ -173,8 +174,10 @@ const Sidebar = ({ className, activeApps, onAppSelect }) => {
                 ))}
               </div>
             </>
-          ) : (
-            // Collapsed Sidebar Apps List
+          )}
+
+          {/* Collapsed Content */}
+          {!isOpen && (
             <div className="flex-1 px-2 py-4 space-y-4 overflow-y-auto">
               {activeApps.map((app, index) => (
                 <Button
@@ -197,13 +200,13 @@ const Sidebar = ({ className, activeApps, onAppSelect }) => {
           {isOpen && !isMobile && (
             <div
               ref={resizeRef}
-              className="absolute top-0 right-0 w-1 h-full cursor-col-resize transition-colors"
+              className="absolute top-0 right-0 w-1 h-full cursor-col-resize transition-colors hover:bg-blue-500"
               onMouseDown={() => setIsResizing(true)}
             />
           )}
         </div>
-      </nav>
-    </>
+      </div>
+    </div>
   );
 };
 
