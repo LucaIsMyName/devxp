@@ -136,7 +136,7 @@ const InAppBrowser = () => {
   };
 
   const TabItem = ({ tab }) => (
-    <div className={`
+    <div data-component="InAppBrowser/TabItem" className={`
       group relative flex items-center gap-2 rounded
       ${activeTabId === tab.id ? 'bg-white' : 'bg-gray-50 hover:bg-gray-50'}
     `}>
