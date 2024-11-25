@@ -160,7 +160,7 @@ const MdToHtml = ({ url, className = '' }) => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center p-4 space-x-4 animate-pulse">
+      <div data-component="MdToHtml" className="flex items-center justify-center p-4 space-x-4 animate-pulse">
         <Placeholder width="md" />
         <Placeholder width="lg" />
         <Placeholder width="sm" />
@@ -170,7 +170,7 @@ const MdToHtml = ({ url, className = '' }) => {
 
   if (error) {
     return (
-      <div className="p-4 text-red-500 bg-red-50 rounded-lg">
+      <div data-component="MdToHtml" className="p-4 text-red-500 bg-red-50 rounded-lg">
         <p className="font-medium">Error loading markdown:</p>
         <p>{error}</p>
       </div>
@@ -179,6 +179,7 @@ const MdToHtml = ({ url, className = '' }) => {
 
   return (
     <article
+      data-component="MdToHtml"
       className={`markdown-content prose prose-slate max-w-none select-text ${className}`}
       dangerouslySetInnerHTML={{ __html: content }}
     />

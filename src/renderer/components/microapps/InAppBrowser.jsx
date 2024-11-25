@@ -267,7 +267,7 @@ const InAppBrowser = () => {
   }, [activeTabId]);
 
   return (
-    <div className="h-screen flex flex-col ">
+    <div data-component="InAppBrowser" className="h-screen flex flex-col ">
       {/* Tab Bar */}
       <div className=" p-4 flex gap-2">
         {/* Navigation Controls and URL Bar */}

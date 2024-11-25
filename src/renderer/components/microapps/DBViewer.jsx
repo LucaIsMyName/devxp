@@ -206,7 +206,7 @@ const DBViewer = ({ initialState }) => {
   });
 
   return (
-    <div className="h-screen flex flex-col">
+    <div data-component="DBViewer" className="h-screen flex flex-col">
       {alert && (
         <div className="p-4">
           <Alert {...alert} onDismiss={() => setAlert(null)} />

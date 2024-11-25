@@ -52,7 +52,7 @@ const HashGenerator = () => {
   };
 
   return (
-    <div className="mx-auto p-6 space-y-6 ">
+    <div data-component="HashGenerator" className="mx-auto p-6 space-y-6 ">
       {/* Input field */}
       <div className="space-y-2">
         <label htmlFor="input" className="block text-sm font-medium text-gray-700">

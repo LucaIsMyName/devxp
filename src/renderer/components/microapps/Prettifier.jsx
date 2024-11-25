@@ -116,27 +116,27 @@ const Prettifier = ({ initialState }) => {
 
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const loadPrettier = async () => {
-      const prettierScript = document.createElement('script');
-      prettierScript.src = 'https://unpkg.com/prettier@2.8.8/standalone.js';
-      document.head.appendChild(prettierScript);
+  // useEffect(() => {
+  //   const loadPrettier = async () => {
+  //     const prettierScript = document.createElement('script');
+  //     prettierScript.src = 'https://unpkg.com/prettier@2.8.8/standalone.js';
+  //     document.head.appendChild(prettierScript);
 
-      const parserBabel = document.createElement('script');
-      parserBabel.src = 'https://unpkg.com/prettier@2.8.8/parser-babel.js';
-      document.head.appendChild(parserBabel);
+  //     const parserBabel = document.createElement('script');
+  //     parserBabel.src = 'https://unpkg.com/prettier@2.8.8/parser-babel.js';
+  //     document.head.appendChild(parserBabel);
 
-      const parserHtml = document.createElement('script');
-      parserHtml.src = 'https://unpkg.com/prettier@2.8.8/parser-html.js';
-      document.head.appendChild(parserHtml);
+  //     const parserHtml = document.createElement('script');
+  //     parserHtml.src = 'https://unpkg.com/prettier@2.8.8/parser-html.js';
+  //     document.head.appendChild(parserHtml);
 
-      const parserPostcss = document.createElement('script');
-      parserPostcss.src = 'https://unpkg.com/prettier@2.8.8/parser-postcss.js';
-      document.head.appendChild(parserPostcss);
-    };
+  //     const parserPostcss = document.createElement('script');
+  //     parserPostcss.src = 'https://unpkg.com/prettier@2.8.8/parser-postcss.js';
+  //     document.head.appendChild(parserPostcss);
+  //   };
 
-    loadPrettier();
-  }, []);
+  //   loadPrettier();
+  // }, []);
 
   // Save state to store whenever it changes
   useEffect(() => {
@@ -322,7 +322,7 @@ const Prettifier = ({ initialState }) => {
   );
 
   return (
-    <div data-component="Prettifier" className="h-screen flex flex-col gap-4">
+    <div data-component="Prettifier" className="h-screen flex flex-col">
       {/* Header with controls */} 
       <div className="flex flex-wrap items-center gap-4 p-4 pb-0">
         <div className="flex flex-wrap items-center gap-4">

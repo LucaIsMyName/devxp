@@ -279,7 +279,7 @@ ${results.records.map(record => `- ${record.data} (TTL: ${record.TTL})`).join('\
             </div>
           </div>
         ) : (
-          <div className="px-4 text-gray-500 ">
+          <div className="px-4 text-gray-500 mt-4">
             Enter a domain and select a record type to check DNS records
           </div>
         )}

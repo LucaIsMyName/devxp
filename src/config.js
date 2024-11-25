@@ -1,23 +1,9 @@
-import { Code2, Network, Hash, Activity, CaseSensitive, SquareMousePointer, Zap, Database, Notebook, ChevronsLeftRightEllipsis } from 'lucide-react';
+import { Code2, Code,AlignLeft, Network, Braces, Hash, Activity, CaseSensitive, SquareMousePointer, Zap, Database, Notebook, ChevronsLeftRightEllipsis } from 'lucide-react';
 import { EditorView } from '@codemirror/view';
 
 
 
 export const MICRO_APPS = [
-  {
-    name: 'Prettifier',
-    description: 'Format and validate JSON data',
-    component: 'Prettifier',
-    icon: Code2,
-    isActive: true
-  },
-  {
-    name: 'Converter',
-    description: 'Convert between different data formats like, JSON, XML, CSV, etc.',
-    component: 'Converter',
-    icon: ChevronsLeftRightEllipsis,
-    isActive: true
-  },
   {
     name: 'DNS Checker',
     description: 'Check website DNS Settings',
@@ -30,6 +16,34 @@ export const MICRO_APPS = [
     description: 'Ping any Website or IP Address',
     component: 'URLPing',
     icon: Zap,
+    isActive: true
+  },
+  {
+    name: 'Prettifier',
+    description: 'Pretty Print JSON, XML, HTML, CSS, JS, ...',
+    component: 'Prettifier',
+    icon: AlignLeft,
+    isActive: true
+  },
+  {
+    name: 'JSON/YAML Converter',
+    description: 'Convert string from and to Json and Yaml formats.',
+    component: 'ConvertJsonYaml',
+    icon: Braces,
+    isActive: true
+  },
+  {
+    name: 'HTML/JSX Converter',
+    description: 'Convert string from and to HTML and Jsx formats.',
+    component: 'ConvertHtmlJsx',
+    icon: Code,
+    isActive: true
+  },
+  {
+    name: 'String Converter',
+    description: 'Convert String from camelCase to snake_case, ... and vice versa',
+    component: 'StringConverter',
+    icon: CaseSensitive,
     isActive: true
   },
   {
@@ -51,13 +65,6 @@ export const MICRO_APPS = [
     description: 'In-App Browser',
     component: 'InAppBrowser',
     icon: SquareMousePointer,
-    isActive: true
-  },
-  {
-    name: 'String Converter',
-    description: 'Convert String from camelCase to snake_case, ... and vice versa',
-    component: 'StringConverter',
-    icon: CaseSensitive,
     isActive: true
   },
   {

@@ -155,14 +155,14 @@ const Sidebar = ({ className, activeApps, onAppSelect, onDevXPClick }) => {
                     onClick={() => handleAppClick(app)}
                   >
                     <div className="flex items-start gap-3 w-full">
-                      <div className="flex-shrink-0 mt-1">
+                      <div className="flex-shrink-0 shadow-sm shadow-inner mt-0.5 p-1 rounded border-2">
                         {React.createElement(app.icon, {
-                          className: 'h-5 w-5 text-gray-500',
+                          className: 'h-5 w-5 text-black',
                           'aria-hidden': 'true'
                         })}
                       </div>
                       <div className="flex-1 min-w-0 truncate">
-                        <h2 className="font-semibold truncate">
+                        <h2 className="font-semibold text-sm tracking-wide truncate">
                           <span className="truncate">{app.name}</span>
                         </h2>
                         <p className="font-normal text-black/60 text-xs truncate">

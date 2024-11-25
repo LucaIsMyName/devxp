@@ -185,7 +185,7 @@ const URLPing = ({ initialState }) => {
   };
 
   return (
-    <div className="flex flex-col h-screen">
+    <div data-component="URLPing" className="flex flex-col h-screen">
       {/* Header Section */}
       <div className="p-4">
         <form onSubmit={handleSubmit} className="flex gap-4 items-center">
