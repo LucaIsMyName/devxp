@@ -1,4 +1,4 @@
-import { Code2, Code,AlignLeft, Network, Braces, Hash, Activity, CaseSensitive, SquareMousePointer, Zap, Database, Notebook, ChevronsLeftRightEllipsis } from 'lucide-react';
+import { Code2, Hexagon, Code, AlignLeft, Network, Braces, Hash, Activity, CaseSensitive, SquareMousePointer, Zap, Database, Notebook, ChevronsLeftRightEllipsis } from 'lucide-react';
 import { EditorView } from '@codemirror/view';
 
 
@@ -40,9 +40,16 @@ export const MICRO_APPS = [
     isActive: true
   },
   {
-    name: 'String Converter',
-    description: 'Convert String from camelCase to snake_case, ... and vice versa',
-    component: 'StringConverter',
+    name: 'Base64 Converter',
+    description: 'Convert any strin from or to Base64.',
+    component: 'ConvertBase64',
+    icon: Hexagon,
+    isActive: true
+  },
+  {
+    name: 'Convert String',
+    description: 'Convert a strings from camelCase to snake_case, ... and vice versa',
+    component: 'ConvertString',
     icon: CaseSensitive,
     isActive: true
   },

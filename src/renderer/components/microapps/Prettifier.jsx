@@ -4,19 +4,23 @@ import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { html } from '@codemirror/lang-html';
 import { css } from '@codemirror/lang-css';
-import { EditorView } from '@codemirror/view'
-import { lineNumbers } from '@codemirror/view'
+import { EditorView } from '@codemirror/view';
+import { lineNumbers } from '@codemirror/view';
 import JsonView from '@uiw/react-json-view';
 import Tooltip from '../partials/Tooltip';
 import SelectMenu from '../partials/SelectMenu';
 import useAppStore from '../../store/appStore';
+import prettier from 'prettier/standalone';
+import parserBabel from 'prettier/parser-babel';
+import htmlParser from 'prettier/parser-html';
+import parserCss from 'prettier/parser-postcss';
 import { lightTheme } from '../../../config';
 
 const FORMAT_OPTIONS = [
-  { value: 'json', label: 'JSON', views: ['pretty', 'tree'], extension: javascript },
-  { value: 'html', label: 'HTML', views: ['pretty'], extension: html },
-  { value: 'css', label: 'CSS', views: ['pretty'], extension: css },
-  { value: 'javascript', label: 'JavaScript', views: ['pretty'], extension: javascript },
+  { value: 'json', label: 'JSON', views: ['pretty', 'tree'], extension: () => javascript() },
+  { value: 'html', label: 'HTML', views: ['pretty'], extension: () => html() },
+  { value: 'css', label: 'CSS', views: ['pretty'], extension: () => css() },
+  { value: 'javascript', label: 'JavaScript', views: ['pretty'], extension: () => javascript() },
 ];
 
 const VIEW_OPTIONS = [
@@ -24,44 +28,80 @@ const VIEW_OPTIONS = [
   { value: 'tree', label: 'Tree View' }
 ];
 
-// Improved formatters
+// Updated formatters to use imported Prettier
+// const formatters = {
+//   json: (str, isTreeView) => {
+//     try {
+//       const parsed = JSON.parse(str.trim());
+//       return isTreeView ? parsed : JSON.stringify(parsed, null, 2);
+//     } catch (error) {
+//       throw new Error('Invalid JSON: ' + error.message);
+//     }
+//   },
+  
+//   javascript: (str) => {
+//     try {
+//       return prettier.format(str, {
+//         parser: 'babel',
+//         plugins: [parserBabel],
+//         printWidth: 80,
+//         tabWidth: 2,
+//         semi: true,
+//         singleQuote: true
+//       });
+//     } catch (error) {
+//       throw new Error('Invalid JavaScript: ' + error.message);
+//     }
+//   },
+
+//   html: (str) => {
+//     try {
+//       return prettier.format(str.trim(), {
+//         parser: 'html',
+//         plugins: [parserHtml],
+//         printWidth: 80,
+//         tabWidth: 2,
+//         htmlWhitespaceSensitivity: 'css'
+//       });
+//     } catch (error) {
+//       throw new Error('Invalid HTML: ' + error.message);
+//     }
+//   },
+
+//   css: (str) => {
+//     try {
+//       return prettier.format(str, {
+//         parser: 'css',
+//         plugins: [parserCss],
+//         printWidth: 80,
+//         tabWidth: 2
+//       });
+//     } catch (error) {
+//       throw new Error('Invalid CSS: ' + error.message);
+//     }
+//   }
+// };
+
 const formatters = {
-  json: (str, isTreeView) => {  // Add isTreeView parameter
+  json: (str, isTreeView) => {
     try {
-      // First try to parse the string to an actual object/array
-      let parsed;
-      try {
-        parsed = JSON.parse(str);
-      } catch (e) {
-        // If initial parse fails, try to clean the string
-        const cleaned = str.replace(/\n/g, '').trim();
-        parsed = JSON.parse(cleaned);
-      }
-
-      // For tree view, return the parsed object directly
-      if (isTreeView) {
-        return parsed;
-      }
-
-      // For pretty view, return formatted string
-      return JSON.stringify(parsed, null, 2);
+      const parsed = JSON.parse(str.trim());
+      return isTreeView ? parsed : JSON.stringify(parsed, null, 2);
     } catch (error) {
       throw new Error('Invalid JSON: ' + error.message);
     }
   },
+  
   javascript: (str) => {
     try {
-      if (window.prettier) {
-        return window.prettier.format(str, {
-          parser: 'babel',
-          plugins: window.prettierPlugins,
-          printWidth: 80,
-          tabWidth: 2,
-          semi: true,
-          singleQuote: true
-        });
-      }
-      throw new Error('Prettier not loaded');
+      return prettier.format(str, {
+        parser: 'babel',
+        plugins: [babelParser],
+        printWidth: 80,
+        tabWidth: 2,
+        semi: true,
+        singleQuote: true
+      });
     } catch (error) {
       throw new Error('Invalid JavaScript: ' + error.message);
     }
@@ -69,16 +109,26 @@ const formatters = {
 
   html: (str) => {
     try {
-      if (window.prettier) {
-        return window.prettier.format(str, {
-          parser: 'html',
-          plugins: window.prettierPlugins,
-          printWidth: 80,
-          tabWidth: 2,
-          htmlWhitespaceSensitivity: 'css'
-        });
-      }
-      throw new Error('Prettier not loaded');
+      // Pre-process the HTML to fix empty tags and normalize spacing
+      const processedStr = str
+        .replace(/>\s+</g, '>\n<') // Add newlines between tags
+        .replace(/<([a-zA-Z]+)><\/([a-zA-Z]+)>/g, (match, p1, p2) => {
+          // Only replace if opening and closing tags match
+          return p1 === p2 ? `<${p1}></${p1}>` : match;
+        })
+        .trim();
+
+      return prettier.format(processedStr, {
+        parser: 'html',
+        plugins: [htmlParser],
+        printWidth: 80,
+        tabWidth: 2,
+        useTabs: false,
+        htmlWhitespaceSensitivity: 'strict',
+        bracketSameLine: false,
+        singleAttributePerLine: false,
+        singleQuote: false
+      });
     } catch (error) {
       throw new Error('Invalid HTML: ' + error.message);
     }
@@ -86,15 +136,12 @@ const formatters = {
 
   css: (str) => {
     try {
-      if (window.prettier) {
-        return window.prettier.format(str, {
-          parser: 'css',
-          plugins: window.prettierPlugins,
-          printWidth: 80,
-          tabWidth: 2
-        });
-      }
-      throw new Error('Prettier not loaded');
+      return prettier.format(str, {
+        parser: 'css',
+        plugins: [cssParser],
+        printWidth: 80,
+        tabWidth: 2
+      });
     } catch (error) {
       throw new Error('Invalid CSS: ' + error.message);
     }

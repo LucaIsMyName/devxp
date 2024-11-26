@@ -10,10 +10,18 @@ async function createWindow() {
   const win = new BrowserWindow({
     width: 1200,
     height: 800,
+    titleBarStyle: "hidden", // Creates a modern hidden title bar with traffic lights
+    vibrancy: 'light',
+    visualEffectState: 'active', // Controls when vibrancy effect is applied
+    backgroundColor: '#00000000', // T
+    transparent: true,
+    frame: false, // Remove default window frame
+    trafficLightPosition: { x: 20, y: 20 }, // Posit
     webPreferences: {
       nodeIntegration: true,
       webviewTag: true,
-      contextIsolation: false
+      contextIsolation: false,
+
     }
   });
 

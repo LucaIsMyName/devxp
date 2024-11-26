@@ -2,7 +2,7 @@ import React from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { EditorView } from '@codemirror/view';
 import Button from '../partials/Button';
-import { Copy } from 'lucide-react';
+import { Copy, FileUp } from 'lucide-react';
 
 const formatters = {
   json: (str, isTreeView) => {
@@ -31,7 +31,6 @@ const formatters = {
     tabWidth: 2
   })
 };
-
 const CodeEditorLayout = ({ 
   leftTitle, 
   rightTitle,
@@ -40,7 +39,8 @@ const CodeEditorLayout = ({
   onLeftChange,
   leftExtensions = [],
   rightExtensions = [],
-  error = null
+  error = null,
+  onFileUpload = null // New prop for file handling
 }) => {
   const editorConfig = {
     height: "100%",
@@ -61,14 +61,28 @@ const CodeEditorLayout = ({
       <div className="h-[50vh] lg:h-full overflow-y-scroll flex flex-col">
         <div className="py-3 pl-4 border-b-2 border-r-2 flex justify-between items-center sticky top-0 z-0">
           <h3 className="font-medium text-gray-700">{leftTitle}</h3>
-          <Button 
-            variant="ghost" 
-            size="sm"
-            className="mr-2"
-            onClick={() => copyToClipboard(leftValue)}
-          >
-            <Copy className="h-4 w-4" />
-          </Button>
+          <div className="flex gap-2 mr-2">
+            {onFileUpload && (
+              <>
+                <input
+                  type="file"
+                  id="file-upload"
+                  className="hidden"
+                  onChange={onFileUpload}
+                />
+                <Button 
+                  onClick={() => document.getElementById('file-upload').click()}
+                >
+                  <FileUp className="h-4 w-4" />
+                </Button>
+              </>
+            )}
+            <Button 
+              onClick={() => copyToClipboard(leftValue)}
+            >
+              <Copy className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
         <div className="flex-1 bg-white min-h-0 overflow-auto border-r-2">
           <CodeMirror

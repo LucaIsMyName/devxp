@@ -10,7 +10,7 @@
     "electron": "wait-on tcp:5174 && electron .",
     "build": "vite build",
     "preview": "vite preview",
-    "binary": "electron-builder"    
+    "binary": "electron-builder"
   },
   "author": "LucaIsMyName",
   "license": "ISC",
@@ -45,6 +45,7 @@
     "lucide-react": "^0.460.0",
     "marked": "^15.0.2",
     "papaparse": "^5.4.1",
+    "prettier": "^2.8.8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.0.1",

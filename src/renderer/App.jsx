@@ -20,10 +20,11 @@ import DBViewer from './components/microapps/DBViewer'
 import WebReader from './components/microapps/WebReader'
 // import Converter from './components/microapps/Converter'
 import InAppBrowser from './components/microapps/InAppBrowser'
-import StringConverter from './components/microapps/StringConverter'
+import ConvertString from './components/microapps/ConvertString'
 import HashGenerator from './components/microapps/HashGenerator'
 import ConvertJsonYaml from './components/microapps/ConvertJsonYaml'
 import ConvertHtmlJsx from './components/microapps/ConvertHtmlJsx'
+import ConvertBase64 from './components/microapps/ConvertBase64'
 
 import initSqlJs from 'sql.js';
 
@@ -42,9 +43,10 @@ const COMPONENT_MAP = {
   HashGenerator: HashGenerator,
   // Converter: Converter,
   InAppBrowser: InAppBrowser,
-  StringConverter: StringConverter,
+  ConvertString: ConvertString,
   ConvertJsonYaml: ConvertJsonYaml,
-  ConvertHtmlJsx: ConvertHtmlJsx
+  ConvertHtmlJsx: ConvertHtmlJsx,
+  ConvertBase64: ConvertBase64
 }
 
 

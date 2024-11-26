@@ -145,7 +145,7 @@ const InAppBrowser = () => {
         className="flex items-center gap-2 pr-8"
       >
         {tab.isLoading ? (
-          <Loader2 className="w-3 h-3 animate-spin" />
+          <Loader2 className="w-5 h-5 animate-spin" />
         ) : (
           <img
             src={getFaviconUrl(tab.url)}
@@ -155,7 +155,7 @@ const InAppBrowser = () => {
             }}
           />
         )}
-        <span className="hidden md:block w-[20px] xl:max-w-[240px] xl:min-w-[120px] truncate text-sm">
+        <span className="hidden lg:block w-[20px] xl:max-w-[240px] xl:min-w-[120px] truncate text-sm">
           {tab.title || 'New Tab'}
         </span>
       </Button>
@@ -311,9 +311,9 @@ const InAppBrowser = () => {
         </div>
 
         {/* Tabs */}
-        <div className="hidden sm:flex items-center space-x-1 overflow-x-auto">
+        <div className="hidden sm:flex items-center space-x-1 overflow-x-hidden">
         {tabs.map(tab => (
-          <TabItem key={tab.id} tab={tab} />
+          <TabItem key={tab.id} tab={tab} className="max-w-16" />
         ))}
         <Button
           onClick={handleNewTab}
@@ -327,7 +327,7 @@ const InAppBrowser = () => {
 
       {/* Browser Content */}
       {activeTab && (
-        <div className="flex-1">
+        <div className="flex-1 sm:border-2 sm:rounded sm:mx-4">
           <webview
             ref={webviewRef}
             src={activeTab.url}

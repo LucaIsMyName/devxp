@@ -9,6 +9,19 @@ const __dirname = path.dirname(__filename)
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  optimizeDeps: {
+    include: [
+      'prettier/standalone',
+      'prettier/parser-babel',
+      'prettier/parser-html',
+      'prettier/parser-postcss'
+    ]
+  },
+  build: {
+    commonjsOptions: {
+      include: [/prettier/]
+    }
+  },
   base: process.env.ELECTRON=="true" ? './' : '/',
   resolve: {
     alias: {
