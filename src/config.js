@@ -1,4 +1,4 @@
-import { Code2, Hexagon, Code, AlignLeft, Network, Braces, Hash, Activity, CaseSensitive, SquareMousePointer, Zap, Database, Notebook, ChevronsLeftRightEllipsis } from 'lucide-react';
+import { Code2, Palette,Hexagon, Code, AlignLeft, Network, Braces, Hash, Activity, CaseSensitive, SquareMousePointer, Zap, Database, Notebook, ChevronsLeftRightEllipsis } from 'lucide-react';
 import { EditorView } from '@codemirror/view';
 
 
@@ -72,6 +72,13 @@ export const MICRO_APPS = [
     description: 'In-App Browser',
     component: 'InAppBrowser',
     icon: SquareMousePointer,
+    isActive: true
+  },
+  {
+    name: 'Generate CSS',
+    description: 'Generate CSS Themes wit Custom Properties and Clkasses on demand',
+    component: 'GenerateCss',
+    icon: Palette,
     isActive: true
   },
   {
