@@ -1,7 +1,14 @@
 # DevXp
 
-`DevXp` is an al-in-one app for development utilities like DNS, ping, prettifiying, converting data-formts or strings.
+**This App is in beta and won't work as expected on your machine**
 
-## Install
+`DevXp` is an al-in-one app for development utilities like DNS, ping, prettifiying, converting data-formts or strings, generating CSS custom property/llibrary themes, ...
 
-1. Go to `devxp.io` and download the `.pckg` Binary
+## To-Do and Bugs
+- switch everything to `.ts`
+- `<SelectMenu />` kind'a buggy
+- `<MdToHtml />`not wrapping everything inside `<p>...</p>`
+- `<Prettifier />` not working -> missing packages
+- re-design `<GenerateCss />`
+- adjust `<InAppBrowser />` design (tabs on x-axis...)
+- `<GenerateCss />`: make it so user can insert custom color, fonts, spacings, widths, ...

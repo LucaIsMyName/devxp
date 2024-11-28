@@ -10,7 +10,7 @@ const Button = ({ children, title = '', className = '', asLink, href = "", isAct
     setActive(isActive);
   }, [isActive]);
 
-  const classNames = `text-left font-mono ${isActive ? `bg-blue-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:bg-blue-700 text-white` : "bg-white text-black hover:bg-gray-50"} font-bold  p-2 border-2 rounded-lg shadow-sm bg-white hover:bg-gray-50 rounded-lg border-black/10 border-2 ${className}`
+  const classNames = `text-left font-mono ${isActive ? `bg-blue-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white` : ""} font-bold  p-2 border-2 rounded-lg shadow-sm bg-white rounded-lg border-black/7 border-2 ${className}`
 
   return (
     asLink === true ?

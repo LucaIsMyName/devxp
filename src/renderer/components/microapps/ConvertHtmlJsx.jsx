@@ -21,6 +21,11 @@ const ConvertHtmlJsx = () => {
   const [output, setOutput] = useState('');
   const [error, setError] = useState(null);
 
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ direction, input }));
+  }, [direction, input]);
+
+
   const toKebabCase = str => str.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
 
   const convertJsxToHtml = (jsx) => {

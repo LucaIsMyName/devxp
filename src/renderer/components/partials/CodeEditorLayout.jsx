@@ -1,38 +1,12 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { EditorView } from '@codemirror/view';
 import Button from '../partials/Button';
-import { Copy, FileUp } from 'lucide-react';
+import { Copy, FileUp, WrapText } from 'lucide-react';
 
-const formatters = {
-  json: (str, isTreeView) => {
-    const parsed = JSON.parse(str);
-    return isTreeView ? parsed : JSON.stringify(parsed, null, 2);
-  },
-  javascript: (str) => window.prettier.format(str, {
-    parser: 'babel',
-    plugins: window.prettierPlugins,
-    printWidth: 80,
-    tabWidth: 2,
-    semi: true,
-    singleQuote: true
-  }),
-  html: (str) => window.prettier.format(str, {
-    parser: 'html',
-    plugins: window.prettierPlugins,
-    printWidth: 80,
-    tabWidth: 2,
-    htmlWhitespaceSensitivity: 'css'
-  }),
-  css: (str) => window.prettier.format(str, {
-    parser: 'css',
-    plugins: window.prettierPlugins,
-    printWidth: 80,
-    tabWidth: 2
-  })
-};
-const CodeEditorLayout = ({ 
-  leftTitle, 
+const CodeEditorLayout = ({
+  leftTitle,
   rightTitle,
   leftValue,
   rightValue,
@@ -40,12 +14,25 @@ const CodeEditorLayout = ({
   leftExtensions = [],
   rightExtensions = [],
   error = null,
-  onFileUpload = null // New prop for file handling
+  onFileUpload = null
 }) => {
-  const editorConfig = {
+  const [leftLineWrap, setLeftLineWrap] = useState(true);
+  const [rightLineWrap, setRightLineWrap] = useState(true);
+
+  const leftEditorConfig = {
     height: "100%",
     extensions: [
-      EditorView.lineWrapping,
+      ...(leftLineWrap ? [EditorView.lineWrapping] : []),
+      EditorView.theme({
+        "&": { height: "100%" }
+      })
+    ]
+  };
+
+  const rightEditorConfig = {
+    height: "100%",
+    extensions: [
+      ...(rightLineWrap ? [EditorView.lineWrapping] : []),
       EditorView.theme({
         "&": { height: "100%" }
       })
@@ -70,16 +57,21 @@ const CodeEditorLayout = ({
                   className="hidden"
                   onChange={onFileUpload}
                 />
-                <Button 
+                <Button
                   onClick={() => document.getElementById('file-upload').click()}
                 >
-                  <FileUp className="h-4 w-4" />
+                  <FileUp className="h-4 h-4" />
                 </Button>
               </>
             )}
-            <Button 
-              onClick={() => copyToClipboard(leftValue)}
+            <Button
+              isActive={leftLineWrap}
+              onClick={() => setLeftLineWrap(!leftLineWrap)}
+              className={`flex items-center gap-1 ${leftLineWrap ? 'bg-blue-600 text-white' : ''}`}
             >
+              <WrapText className={`h-4 w-4 `} />
+            </Button>
+            <Button onClick={() => copyToClipboard(leftValue)}>
               <Copy className="h-4 w-4" />
             </Button>
           </div>
@@ -88,8 +80,8 @@ const CodeEditorLayout = ({
           <CodeMirror
             value={leftValue}
             height="100%"
-            {...editorConfig}
-            extensions={[...leftExtensions, ...editorConfig.extensions]}
+            {...leftEditorConfig}
+            extensions={[...leftExtensions, ...leftEditorConfig.extensions]}
             onChange={onLeftChange}
           />
         </div>
@@ -98,13 +90,21 @@ const CodeEditorLayout = ({
       <div className="h-[50vh] lg:h-full overflow-y-scroll flex flex-col">
         <div className="py-3 px-4 border-b-2 flex justify-between items-center sticky top-0 z-0">
           <h3 className="font-medium text-gray-700">{rightTitle}</h3>
-          <Button 
-            variant="ghost" 
-            size="sm"
-            onClick={() => copyToClipboard(rightValue)}
-          >
-            <Copy className="h-4 w-4" />
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              isActive={rightLineWrap}
+              onClick={() => setRightLineWrap(!rightLineWrap)}
+              className={`flex items-center gap-1 ${rightLineWrap ? 'bg-blue-600 text-white' : ''}`}
+            >
+              <WrapText className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={() => copyToClipboard(rightValue)}
+            >
+              <Copy className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
         <div className="flex-1 bg-white min-h-0 overflow-auto">
           {error ? (
@@ -115,8 +115,8 @@ const CodeEditorLayout = ({
             <CodeMirror
               value={rightValue}
               height="100%"
-              {...editorConfig}
-              extensions={[...rightExtensions, ...editorConfig.extensions]}
+              {...rightEditorConfig}
+              extensions={[...rightExtensions, ...rightEditorConfig.extensions]}
               editable={false}
             />
           )}
