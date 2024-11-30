@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import { 
-  Database, Table as TableIcon, ArrowDown, ArrowUp, 
-  Save, ChevronRight, ChevronDown, FileCog 
+import {
+  Database, Table as TableIcon, ArrowDown, ArrowUp,
+  Save, ChevronRight, ChevronDown, FileCog
 } from 'lucide-react';
 import {
   flexRender,
@@ -15,10 +15,8 @@ import {
 import { databaseService } from '../../../services/DatabaseService';
 import useAppStore from '../../store/appStore';
 import Alert from '../partials/Alert';
+import Toast from '../partials/Toast';
 import Button from '../partials/Button';
-
-const electron = window.require('electron');
-const { ipcRenderer } = electron;
 
 const DBViewer = ({ initialState }) => {
   const [dbPath, setDbPath] = useState(null);
@@ -46,9 +44,9 @@ const DBViewer = ({ initialState }) => {
   const loadDatabase = async (path) => {
     try {
       setIsLoading(true);
-      const buffer = await ipcRenderer.invoke('read-file', path);
+      const buffer = await window.electronAPI.readFile(path);
       const dbData = await databaseService.loadDatabase(path, buffer);
-      
+
       setDbPath(path);
       setDbInfo(dbData);
       setAlert({
@@ -70,27 +68,30 @@ const DBViewer = ({ initialState }) => {
 
   const handleFileSelect = async () => {
     try {
-      const result = await window.electronAPI.showOpenDialog({
-        properties: ['openFile'],
-        filters: [
-          { name: 'Databases', extensions: ['db', 'sqlite', 'sqlite3', 'json'] }
-        ]
-      });
+      const result = await window.electronAPI.showFileDialog();
 
       if (!result.canceled && result.filePaths.length > 0) {
         const filePath = result.filePaths[0];
-        const buffer = await window.electronAPI.readFile(filePath);
-        
         setIsLoading(true);
-        const dbData = await databaseService.loadDatabase(filePath, buffer);
-        
-        setDbPath(filePath);
-        setDbInfo(dbData);
-        setAlert({
-          title: 'Success',
-          message: `Loaded ${dbData.tables.length} tables from database`,
-          variant: 'success'
-        });
+
+        try {
+          const buffer = await window.electronAPI.readFile(filePath);
+          const dbData = await databaseService.loadDatabase(filePath, buffer);
+
+          setDbPath(filePath);
+          setDbInfo(dbData);
+          setAlert({
+            title: 'Success',
+            message: `Loaded ${dbData.tables.length} tables from database`,
+            variant: 'success'
+          });
+        } catch (error) {
+          setAlert({
+            title: 'Error',
+            message: `Failed to load database: ${error.message}`,
+            variant: 'error'
+          });
+        }
       }
     } catch (error) {
       console.error('File selection error:', error);
@@ -105,11 +106,12 @@ const DBViewer = ({ initialState }) => {
   };
 
 
+
   const handleTableSelect = async (tableName) => {
     try {
       setIsLoading(true);
       setActiveTable(tableName);
-      
+
       const data = await databaseService.getTableData(tableName);
       setTableData(data);
       setEditedCells(new Map());
@@ -123,12 +125,12 @@ const DBViewer = ({ initialState }) => {
       setIsLoading(false);
     }
   };
-  
+
 
   const handleCellEdit = useCallback((rowIndex, columnId, value) => {
     const cellKey = `${rowIndex}-${columnId}`;
     setEditedCells(prev => new Map(prev.set(cellKey, value)));
-    
+
     setTableData(prev => {
       const newRows = [...prev.rows];
       newRows[rowIndex] = {
@@ -141,10 +143,10 @@ const DBViewer = ({ initialState }) => {
 
   const handleSaveChanges = async () => {
     if (editedCells.size === 0) return;
-  
+
     try {
       setIsLoading(true);
-      
+
       const changes = Array.from(editedCells.entries()).map(([key, value]) => {
         const [rowIndex, columnId] = key.split('-');
         return {
@@ -153,9 +155,9 @@ const DBViewer = ({ initialState }) => {
           value
         };
       });
-  
+
       await databaseService.saveChanges(activeTable, changes);
-      
+
       setEditedCells(new Map());
       setAlert({
         title: 'Success',
@@ -206,18 +208,18 @@ const DBViewer = ({ initialState }) => {
   });
 
   return (
-    <div data-component="DBViewer" className="h-screen flex flex-col">
+    <div data-component="DBViewer" className="min-h-screen relative flex flex-col">
       {alert && (
-        <div className="p-4">
+        <Toast duration={3000} className="p-4">
           <Alert {...alert} onDismiss={() => setAlert(null)} />
-        </div>
+        </Toast>
       )}
 
       <div className="flex-1 flex min-h-0">
         {!dbPath ? (
           <div className="flex-1 flex items-center justify-center">
             <div className="text-center p-8">
-              <Database className="h-16 w-16 mx-auto mb-4 text-gray-400 dark:text-gray-700 dark:text-gray-200" />
+              <Database className="h-16 w-16 mx-auto mb-4 text-gray-400 dark:text-gray-200" />
               <h2 className="text-xl font-semibold mb-2">Import a Database File</h2>
               <p className="text-gray-600 dark:text-gray-300 mb-4">
                 Supported formats: SQLite, MySQL dumps, PostgreSQL dumps, MongoDB exports
@@ -233,8 +235,16 @@ const DBViewer = ({ initialState }) => {
           </div>
         ) : (
           <div className="flex-1 grid grid-cols-4 min-h-0">
+            <div className='fixed bottom-4 right-4 si-12'>
+              <Button
+                onClick={handleFileSelect}
+                className="flex items-center gap-2 mx-auto"
+              >
+                <FileCog className="w-4 h-4" />
+              </Button>
+            </div>
             {/* Tables Sidebar */}
-            <div className="col-span-1 border-r-2 dark:border-gray-800 overflow-y-auto bg-gray-50 dark:bg-gray-black">
+            <div className="col-span-1 border-r-2 border-t-2 dark:border-gray-800 overflow-y-auto bg-gray-50 dark:bg-black">
               <div className="p-4">
                 <h2 className="font-semibold mb-4 flex items-center gap-2">
                   <TableIcon className="h-4 w-4" />
@@ -296,9 +306,9 @@ const DBViewer = ({ initialState }) => {
                                   {header.isPlaceholder
                                     ? null
                                     : flexRender(
-                                        header.column.columnDef.header,
-                                        header.getContext()
-                                      )}
+                                      header.column.columnDef.header,
+                                      header.getContext()
+                                    )}
                                 </th>
                               ))}
                             </tr>

@@ -14,12 +14,14 @@ export default defineConfig({
       'prettier/standalone',
       'prettier/parser-babel',
       'prettier/parser-html',
-      'prettier/parser-postcss'
-    ]
+      'prettier/parser-postcss',
+      'sql.js'
+    ],
+    exclude: ['sql.js']
   },
   build: {
     commonjsOptions: {
-      include: [/prettier/]
+      include: [/prettier/, , /sql\.js/]
     }
   },
   base: process.env.ELECTRON=="true" ? './' : '/',
@@ -31,7 +33,10 @@ export default defineConfig({
   server: {
     port: 5174,
     strictPort: false,
-    host: true
+    host: true,
+    fs: {
+      allow: ['..']
+    }
   },
   root: '.',
   build: {

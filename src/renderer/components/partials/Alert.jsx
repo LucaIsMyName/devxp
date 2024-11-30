@@ -1,19 +1,20 @@
 import { Save, FileWarning, X } from 'lucide-react';
+import { useEffect } from 'react';
 // Custom Alert Component
 const Alert = ({ title, message, variant = 'info', onDismiss }) => {
   const bgColor = {
-    info: 'bg-blue-50 border-blue-200 text-blue-800',
-    error: 'bg-red-50 border-red-200 text-red-800',
-    success: 'bg-green-50 border-green-200 text-green-800',
+    info: 'bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-200',
+    error: 'bg-red-50 dark:bg-red-950 border-red-200 dark:border-red-800 text-red-800 dark:text-red-200',
+    success: 'bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800 text-green-800 dark:text-green-200',
   }[variant];
 
   return (
-    <div data-component="AppInfo" className={`p-4 rounded-lg border ${bgColor} relative select-text`}>
+    <div data-component="Alert" className={`p-4 rounded-lg border ${bgColor} relative select-text`}>
       <div className="flex gap-2 items-start">
         <FileWarning className="h-5 w-5 flex-shrink-0 mt-0.5" />
         <div className="flex-1">
           {title && <h3 className="font-semibold mb-1">{title}</h3>}
-          <p className="text-sm">{message}</p>
+          {message &&<p className="text-sm">{message}</p>}
         </div>
         {onDismiss && (
           <button
