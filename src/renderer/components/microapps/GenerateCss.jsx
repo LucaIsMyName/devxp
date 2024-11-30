@@ -5,6 +5,8 @@ import Button from "../partials/Button";
 import Input from "../partials/Input";
 import SelectMenu from "../partials/SelectMenu";
 import Modal from "../partials/Modal";
+import Toast from "../partials/Toast";
+import Alert from "../partials/Alert";
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { css } from "@codemirror/lang-css";
@@ -314,9 +316,19 @@ const FieldSection = ({ title, fields, values, onValueChange, onLabelChange, onA
   );
 };
 
+
+
 const GenerateCss = () => {
   const [showModal, setShowModal] = useState(false);
   const [minified, setMinified] = useState(false);
+  const [copiedToClipboard, setCopiedToClipboard] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setCopiedToClipboard(false);
+    }, 2000);
+  }, [copiedToClipboard]);
+      
 
   // Initialize state with default fields
   const [state, setState] = useState(() => {
@@ -403,6 +415,13 @@ const GenerateCss = () => {
 
   return (
     <div data-component="GenerateCss" className=" flex flex-col">
+      {
+        copiedToClipboard && (
+          <Toast duration={4000} className={`z-[1000]`}>
+            <Alert className="py-2" variant="success" title="Copied" />
+          </Toast>
+        )
+      }
       <div className="flex items-center gap-4 p-4 pb-0">
         <SelectMenu
           options={LIBRARY_OPTIONS}
@@ -455,6 +474,7 @@ const GenerateCss = () => {
               </label>
               <Button onClick={() => {
                 navigator.clipboard.writeText(generateTheme(values, fields, selectedLibrary?.value || LIBRARY_OPTIONS[0].value, minified));
+                setCopiedToClipboard(true);
               }}>
                 <Copy className="size-4 text-gray-50 dark:text-gray-black0 dark:text-gray-200" />
               </Button>
@@ -463,7 +483,8 @@ const GenerateCss = () => {
 
           <CodeMirror
             value={generateTheme(values, fields, selectedLibrary?.value || LIBRARY_OPTIONS[0].value, minified)}
-            height="400px"
+            height="auto"
+            maxHeight="55vh"
             extensions={[selectedLibrary?.value === "vanilla" ? css() : javascript()]}
             editable={false}
           />

@@ -92,16 +92,16 @@ const HashGenerator = () => {
               </div>
 
             </div>
-            <div className="relative p-1 px-2 text-green-300 bg-black/90 border-2 dark:border-gray-800 border-black font-semibold rounded-lg shadow-sm rounded-lg border-black/10 border-2 dark:border-gray-800 w-full ">
-              <span className='font-mono text-xs break-all'>{hashes[name] || 'No hash generated yet'}</span>
+            <div className="relative p-2 px-4 text-green-100 bg-black/90 border-2 dark:border-gray-800 border-black rounded-lg shadow-sm rounded-lg border-black/10 border-2 dark:border-gray-800 w-full ">
+              <span className='font-mono w-[100%-32px] text-xs break-all'>{hashes[name] || 'No hash generated yet'}</span>
               <button
                 onClick={() => copyToClipboard(name, hashes[name])}
-                className="size-5 absolute top-[calc(50%-(theme(spacing.5)/2)] right-1 rounded transition-colors"
+                className="size-5 absolute top-2.5 right-2.5 rounded transition-colors"
                 title="Copy to clipboard"
                 disabled={!hashes[name]}
               >
-                {copiedStates[name] ? (
-                  <Check strokeWidth={2} className="h-4 w-4 text-green-600" />
+                {copiedStates[name] & input !== "" ? (
+                  <Check strokeWidth={2} className="h-4 w-4 text-green-600 dark:text-green-300" />
                 ) : (
                   <Copy strokeWidth={2} className="h-4 w-4 text-gray-600 dark:text-gray-300" />
                 )}

@@ -147,7 +147,7 @@ const Prettifier = ({ initialState }) => {
   const [view, setView] = useState(savedState.view || 'pretty');
   const [input, setInput] = useState(savedState.input || '');
   const [output, setOutput] = useState(savedState.output || '');
-  const [isLineWrapped, setIsLineWrapped] = useState(savedState.isLineWrapped ?? true);
+  const [isLineWrapped, setIsLineWrapped] = useState(savedState.isLineWrapped ?? false);
   const [copiedToClipboard, setCopiedToClipboard] = useState(false);
   const [error, setError] = useState(null);
 
@@ -245,7 +245,9 @@ const Prettifier = ({ initialState }) => {
         value={typeof output === 'string' ? output : JSON.stringify(output, null, 2)}
         height="100%"
         {...editorConfig}
-        editable={false}
+        
+        setIsLineWrapped={false}
+        editable={true}
       />
     );
   };
@@ -269,7 +271,7 @@ const Prettifier = ({ initialState }) => {
     extensions: [
       format.extension(),
       lineNumbers(),
-      isLineWrapped ? EditorView.lineWrapping : [],
+      ...(isLineWrapped ? [EditorView.lineWrapping] : []),
       EditorView.theme({
         "&": {
           height: "100%"
