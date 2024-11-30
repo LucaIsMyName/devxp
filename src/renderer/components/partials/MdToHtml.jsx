@@ -46,7 +46,7 @@ const MdToHtml = ({ url, className = '' }) => {
 
     renderer.paragraph = (text) => {
       console.log('Paragraph:', { text });
-      return `<p class="text-gray-700 leading-relaxed mb-4">${safeText(text)}</p>`;
+      return `<p class="text-gray-700 dark:text-gray-200 leading-relaxed mb-4">${safeText(text)}</p>`;
     };
 
     renderer.list = (body, ordered) => {
@@ -58,7 +58,7 @@ const MdToHtml = ({ url, className = '' }) => {
 
     renderer.listitem = (text) => {
       console.log('List item:', { text });
-      return `<li class="text-gray-700">${safeText(text)}</li>`;
+      return `<li class="text-gray-700 dark:text-gray-200">${safeText(text)}</li>`;
     };
 
     renderer.codespan = (code) => {

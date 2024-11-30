@@ -166,7 +166,7 @@ const URLPing = ({ initialState }) => {
   const getStatusColor = (success, error) => {
     if (error) return 'text-red-500';
     if (success) return 'text-green-500';
-    return 'text-gray-400';
+    return 'text-gray-400 dark:text-gray-700 dark:text-gray-200';
   };
 
   const getStatusIcon = (pingResult) => {
@@ -175,7 +175,7 @@ const URLPing = ({ initialState }) => {
       return <AlertTriangle strokeWidth={2} className="w-5 h-5 text-red-500" />;
     }
     return pingResult.success ?
-      <CheckCircle2 strokeWidth={2} className="w-5 h-5 text-gray-500" /> :
+      <CheckCircle2 strokeWidth={2} className="w-5 h-5 text-gray-50 dark:text-gray-black0 dark:text-gray-200" /> :
       <XCircle strokeWidth={2} className="w-5 h-5 text-red-500" />;
   };
 
@@ -185,12 +185,12 @@ const URLPing = ({ initialState }) => {
   };
 
   return (
-    <div data-component="URLPing" className="flex flex-col h-screen">
+    <div data-component="URLPing" className="flex flex-col overflow-y-scroll">
       {/* Header Section */}
       <div className="p-4">
         <form onSubmit={handleSubmit} className="flex gap-4 items-center">
           <div className="relative flex-1">
-            <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-700 dark:text-gray-200 w-4 h-4" />
             <Input
               type="text"
               value={url}
@@ -232,9 +232,9 @@ const URLPing = ({ initialState }) => {
 
 
       {/* Results Section */}
-      <div className="flex-1 overflow-auto p-4 pt-0">
+      <div className="flex-1 p-4 pt-0">
         {error && (
-          <div className="mb-4 p-4 bg-red-50 border-2 border-red-200 rounded-lg flex items-center gap-2 text-red-600">
+          <div className="mb-4 p-4 bg-red-50 dark:bg-red-900 dark:text-red-200 border-2 dark:border-gray-800 border-red-200 dark:border-red-800 rounded-lg flex items-center gap-2 text-red-600">
             <AlertTriangle className="w-5 h-5" strokeWidth={2}/>
             {error}
           </div>
@@ -245,7 +245,7 @@ const URLPing = ({ initialState }) => {
           {pingHistory.map((ping, index) => (
             <div
               key={ping.timestamp.getTime()}
-              className={`p-4 text-xs sm:text-base border-2 rounded-lg bg-white transition-colors ${index === 0 ? 'border-gray-300' : 'border'
+              className={`p-4 text-xs sm:text-base border-2 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-900 transition-colors ${index === 0 ? 'border-gray-300' : 'border'
                 }`}
             >
               <div className="flex items-center justify-between mb-4">
@@ -253,38 +253,38 @@ const URLPing = ({ initialState }) => {
                   {getStatusIcon(ping)}
                   <span className="font-mono">{ping.url}</span>
                 </div>
-                <span className="text-xs sm:text-base text-gray-500">
+                <span className="text-xs sm:text-base text-gray-50 dark:text-gray-black0 dark:text-gray-200">
                   {ping.timestamp.toLocaleTimeString()}
                 </span>
               </div>
 
               <div className="flex item.center gap-4 text-sm">
                 <div>
-                  <span className="text-gray-500 text-xs "></span>
-                  <span className={`uppercase font-mono text-xs ${ping.success ? 'bg-green-50 border-green-500' : 'bg-red-50 border-red-500'} border-2 px-2 rounded-full  ${getStatusColor(ping.success, ping.error)}`}>
+                  <span className="text-gray-50 dark:text-gray-black0 dark:text-gray-200 text-xs "></span>
+                  <span className={`uppercase font-mono text-xs ${ping.success ? 'bg-green-50 dark:bg-green-900 dark:text-green-200 border-green-500 dark:border-green-700' : 'bg-red-50 dark:bg-red-900 border-red-500 dark:border-red-700 dark:text-red-300'} border-2 dark:border-gray-800 px-2 rounded-full  ${getStatusColor(ping.success, ping.error)}`}>
                     {ping.error || (ping.success ? 'Connected' : 'Failed')}
                   </span>
                 </div>
 
                 <div>
-                  <span className="text-gray-500 text-xs "></span>
-                  <span className="font-mono text-xs px-2 border-2 rounded-full uppercase">
+                  <span className="text-gray-50 dark:text-gray-black0 dark:text-gray-200 text-xs "></span>
+                  <span className="font-mono text-xs px-2 border-2 dark:border-gray-800 rounded-full uppercase">
                     {ping.responseTime}ms
                   </span>
                 </div>
               </div>
 
               {Object.keys(ping.headers).length > 0 && (
-                <div className="mt-2 pt-2 border-t-2">
+                <div className="mt-2 pt-2 border-t-2 dark:border-gray-800">
                   <details className="text-sm">
-                    <summary className="cursor-pointer text-gray-500 hover:text-gray-700">
+                    <summary className="cursor-pointer text-gray-50 dark:text-gray-black0 dark:text-gray-200 hover:text-gray-700 dark:text-gray-200">
                       Response Details
                     </summary>
                     <div className="mt-2 pl-4 space-y-1 font-mono text-xs">
                       {Object.entries(ping.headers).map(([key, value]) => (
                         <div key={key}>
-                          <span className="text-gray-500">{key}:</span>{' '}
-                          <span className="text-gray-700">{value}</span>
+                          <span className="text-gray-50 dark:text-gray-black0 dark:text-gray-200">{key}:</span>{' '}
+                          <span className="text-gray-700 dark:text-gray-200">{value}</span>
                         </div>
                       ))}
                     </div>
@@ -295,13 +295,13 @@ const URLPing = ({ initialState }) => {
           ))}
 
           {pingHistory.length === 0 && !isPinging && (
-            <div className=" text-gray-500 pb-4">
+            <div className=" text-gray-50 dark:text-gray-black0 dark:text-gray-200 pb-4">
               Enter a URL and click Ping to start monitoring
             </div>
           )}
 
           {isPinging && pingHistory.length === 0 && (
-            <div className="text-center text-gray-500 py-8 animate-pulse">
+            <div className="text-center text-gray-50 dark:text-gray-black0 dark:text-gray-200 py-8 animate-pulse">
               Pinging...
             </div>
           )}

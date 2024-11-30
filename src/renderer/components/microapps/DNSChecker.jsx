@@ -1,6 +1,6 @@
 import React, { useState, useCallback , useEffect} from 'react';
 import { debounce } from 'lodash';
-import { Download, Globe } from 'lucide-react';
+import { Download, Globe, FileJson, FileText, Sheet } from 'lucide-react';
 
 import Tooltip from '../partials/Tooltip';
 import SelectMenu from '../partials/SelectMenu';
@@ -185,12 +185,12 @@ ${results.records.map(record => `- ${record.data} (TTL: ${record.TTL})`).join('\
   };
 
   return (
-    <div data-component="DNSChecker" className="h-screen overflow-y-scroll flex flex-col">
+    <div data-component="DNSChecker" className="flex flex-col">
       {/* Header with controls */}
       <div className="p-4 pb-0">
         <form onSubmit={handleSubmit} className="lg:flex space-y-4 lg:space-y-0 gap-4 items-center">
           <div className="flex-1 relative">
-          <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+          <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-700 dark:text-gray-200 w-4 h-4" />
             <Input
               type="text"
               value={url}
@@ -218,16 +218,16 @@ ${results.records.map(record => `- ${record.data} (TTL: ${record.TTL})`).join('\
         </form>
 
         {/* {results && (
-          <div className="mt-4 text-xs text-gray-500">
+          <div className="mt-4 text-xs text-gray-50 dark:text-gray-black0 dark:text-gray-200">
             Last checked: {new Date(results.timestamp).toLocaleString()}
           </div>
         )} */}
       </div>
 
       {/* Results area */}
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1">
         {error ? (
-          <div className="mx-4 rounded border-red-300 border-2 p-4 bg-red-50 text-red-500">
+          <div className="mx-4 mt-4 rounded border-red-300 dark:border-red-800 border-2 dark:border-gray-800 dark:bg-red-900 dark:text-red-300 p-4 bg-red-50 text-red-500">
             Error: {error}
           </div>
         ) : results ? (
@@ -244,10 +244,14 @@ ${results.records.map(record => `- ${record.data} (TTL: ${record.TTL})`).join('\
                   >
                     <Button
                       onClick={() => exportData(format.value)}
-                      className="px-4 font-normal font-mono text-gray-600 rounded-lg hover:bg-gray-50 flex items-center border-2 "
+                      className="pr-4 font-normal font-mono text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-black flex items-center border-2 dark:border-gray-800 "
                     >
-                      <Download className="h-4 w-4" />
-                      <span className="ml-1">{format.label}</span>
+                      {
+                        format.value === 'json' ? <FileJson className="h-5 w-5" /> :
+                        format.value === 'csv' ? <Sheet className="h-5 w-5" /> :
+                        <FileText className="h-5 w-5" />
+                      }
+                      <span className="ml-1 text-sm leading-tight">{format.label}</span>
                     </Button>
                   </Tooltip>
                 ))}
@@ -258,19 +262,19 @@ ${results.records.map(record => `- ${record.data} (TTL: ${record.TTL})`).join('\
               {results.records.map((record, index) => (
                 <div
                   key={index}
-                  className="p-4 border-2 bg-white rounded-lg hover:bg-gray-50 transition-colors"
+                  className="p-4 border-2 dark:border-gray-800 bg-white dark:bg-gray-900 rounded-lg hover:bg-gray-50 dark:bg-gray-black transition-colors"
                 >
                   <div className="sm:flex space-y-1 sm:space-y-0 gap-3 gap-4">
                     <div className="flex-1  text-xs sm:text-base">
-                      <p className="text-gray-500">Name:</p>
+                      <p className="text-gray-50 dark:text-gray-black0 dark:text-gray-200">Name:</p>
                       <p className="font-mono font-semibold">{record.name}</p>
                     </div>
                     <div className="flex-1 text-xs sm:text-base max-w-64">
-                      <p className="text-gray-500">TTL:</p>
+                      <p className="text-gray-50 dark:text-gray-black0 dark:text-gray-200">TTL:</p>
                       <p className="font-mono">{record.TTL}s</p>
                     </div>
                     <div className="flex-1  text-xs sm:text-base">
-                      <p className="text-gray-500">Data:</p>
+                      <p className="text-gray-50 dark:text-gray-black0 dark:text-gray-200">Data:</p>
                       <p className="font-mono break-all">{record.data}</p>
                     </div>
                   </div>
@@ -279,7 +283,7 @@ ${results.records.map(record => `- ${record.data} (TTL: ${record.TTL})`).join('\
             </div>
           </div>
         ) : (
-          <div className="px-4 text-gray-500 mt-4">
+          <div className="px-4 text-gray-50 dark:text-gray-black0 dark:text-gray-200 mt-4">
             Enter a domain and select a record type to check DNS records
           </div>
         )}

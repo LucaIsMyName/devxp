@@ -106,6 +106,7 @@ const Sidebar = ({ className, activeApps, onAppSelect, onDevXPClick }) => {
         className={`
           ${isMobile ? 'fixed' : 'sticky'}
           z-50 h-screen
+         
           left-0 top-0
           flex-shrink-0
           transition-width duration-300
@@ -113,10 +114,10 @@ const Sidebar = ({ className, activeApps, onAppSelect, onDevXPClick }) => {
         `}
       >
         {/* Sidebar Content */}
-        <div className="h-full bg-white border-r-2 flex flex-col">
+        <div className="h-full bg-white dark:bg-gray-900 dark:bg-gray-900 border-r-2 dark:border-gray-800 flex flex-col">
           {/* Collapsed Header */}
           {!isOpen && (
-            <div className="flex-shrink-0 h-[64px] flex items-center justify-center border-b-2 bg-white">
+            <div className="flex-shrink-0 h-[64px] flex items-center justify-center border-b-2 dark:border-gray-800 bg-white dark:bg-gray-900 dark:bg-black">
               <Button
                 onClick={() => setIsOpen(true)}
                 className="mx-auto p-0 border-0 rounded-lg"
@@ -129,19 +130,19 @@ const Sidebar = ({ className, activeApps, onAppSelect, onDevXPClick }) => {
           {/* Expanded Content */}
           {isOpen && (
             <>
-              <div className="flex-shrink-0 bg-white z-10 px-4 py-4 border-b-2">
+              <div className="flex-shrink-0 bg-white dark:bg-gray-900 dark:bg-black z-10 px-4 py-4 border-b-2 dark:border-gray-800">
                 <div className="flex gap-4 items-center justify-between w-full">
                   <Button
                     onClick={onDevXPClick} // Add the click handler here
-                    className="px-4 "
+                    className="px-4 dark:text-white"
                   >
                     <Logo />
                   </Button>
                   <Button
                     onClick={() => setIsOpen(false)}
-                    className="p-2 rounded-lg transition-colors hover:bg-transparent"
+                    className="p-2 rounded-lg dark:bg-black transition-colors hover:bg-transparent"
                   >
-                    <ChevronLeft className="h-5 w-5" />
+                    <ChevronLeft className="h-5 w-5 dark:text-white transition-colors" />
                   </Button>
                 </div>
               </div>
@@ -155,17 +156,23 @@ const Sidebar = ({ className, activeApps, onAppSelect, onDevXPClick }) => {
                     onClick={() => handleAppClick(app)}
                   >
                     <div className="flex items-start gap-3 w-full">
-                      <div className="flex-shrink-0 shadow-sm shadow-inner mt-0.5 p-1 rounded border-2">
+                      <div className="flex-shrink-0 shadow-sm shadow-inner mt-0.5 p-1 rounded border-2 dark:border-gray-800">
                         {React.createElement(app.icon, {
-                          className: 'h-5 w-5 text-black',
+                          className: 'h-5 w-5 text-black dark:text-white',
                           'aria-hidden': 'true'
                         })}
                       </div>
                       <div className="flex-1 min-w-0 truncate">
-                        <h2 className="font-semibold text-sm tracking-wide truncate">
+                        <h2 className="font-semibold text-sm tracking-wide truncate relative">
                           <span className="truncate">{app.name}</span>
+                          {app.isActive === false && (
+                            <span className=" absolute right-0 top-0 rounded-full bg-yellow-900 text-yellow-700 dark:text-yellow-400 border-yellow-500 dark:border-yellow-500 inline-block px-[0.6em] py-[0.1em] pt-[0.2em] uppercase leading-tight border-2 dark:border-gray-800 text-[8px] tracking-wide ml-1">Dev</span>
+                          )}
+                          {app.isActive === true && (
+                            <span className=" absolute right-0 top-0 rounded-full bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-200 border-green-500 dark:border-green-700 inline-block px-[0.6em] py-[0.1em] pt-[0.2em] uppercase leading-tight border-2 dark:border-gray-800 text-[8px] tracking-wide ml-1">Prod</span>
+                          )}
                         </h2>
-                        <p className="font-normal text-black/60 text-xs truncate">
+                        <p className="font-normal text-black dark:text-white/60 text-xs truncate">
                           <span className="truncate">{app.description}</span>
                         </p>
                       </div>
@@ -178,19 +185,25 @@ const Sidebar = ({ className, activeApps, onAppSelect, onDevXPClick }) => {
 
           {/* Collapsed Content */}
           {!isOpen && (
-            <div className="flex-1 px-2 py-4 space-y-4 overflow-y-auto">
+            <div className="flex-1 overflow-y-auto">
               {activeApps.map((app, index) => (
                 <Button
                   key={index}
                   title={`Open ${app.name} App`}
-                  className={`w-full p-2 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors ${activeApp === app.component ? 'bg-blue-50 border-blue-500' : ''
+                  className={`w-full relative !shadow-none !border-0 !border-transparent rounded-none p-2 py-4 flex items-center justify-center transition-colors ${activeApp === app.component ? '' : ''
                     }`}
                   onClick={() => handleAppClick(app)}
                 >
                   {React.createElement(app.icon, {
-                    className: 'h-5 w-5 text-gray-500',
+                    className: 'h-5 w-5 text-gray-600 dark:text-gray-300',
                     'aria-hidden': 'true'
                   })}
+                  {app.isActive === false && (
+                            <span className=" absolute right-2 bottom-2 rounded-full bg-yellow-900 text-yellow-700 dark:text-yellow-400 border-yellow-500 dark:border-yellow-500 block border-2 dark:border-gray-800 size-3"></span>
+                          )}
+                          {app.isActive === true && (
+                            <span className=" absolute right-2 bottom-2 rounded-full bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-200 border-green-500 dark:border-green-700 block border-2 dark:border-gray-800 size-3"></span>
+                          )}
                 </Button>
               ))}
             </div>

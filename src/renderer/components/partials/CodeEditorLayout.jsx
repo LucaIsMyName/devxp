@@ -46,8 +46,8 @@ const CodeEditorLayout = ({
   return (
     <div data-component="CodeEditorLayout" className="flex-1 flex flex-col lg:grid lg:grid-cols-2 min-h-0">
       <div className="h-[50vh] lg:h-full overflow-y-scroll flex flex-col">
-        <div className="py-3 pl-4 border-b-2 border-r-2 flex justify-between items-center sticky top-0 z-0">
-          <h3 className="font-medium text-gray-700">{leftTitle}</h3>
+        <div className="py-3 pl-4 border-b-2 dark:border-gray-800 border-r-2 dark:border-gray-800 flex justify-between items-center sticky top-0 z-0">
+          <h3 className="font-medium text-gray-700 dark:text-gray-200">{leftTitle}</h3>
           <div className="flex gap-2 mr-2">
             {onFileUpload && (
               <>
@@ -67,16 +67,16 @@ const CodeEditorLayout = ({
             <Button
               isActive={leftLineWrap}
               onClick={() => setLeftLineWrap(!leftLineWrap)}
-              className={`flex items-center gap-1 ${leftLineWrap ? 'bg-blue-600 text-white' : ''}`}
+              className={`flex items-center gap-1 ${leftLineWrap ? '' : ''}`}
             >
-              <WrapText className={`h-4 w-4 `} />
+              <WrapText className={`h-4 w-4 text-black dark:text-white`} />
             </Button>
             <Button onClick={() => copyToClipboard(leftValue)}>
               <Copy className="h-4 w-4" />
             </Button>
           </div>
         </div>
-        <div className="flex-1 bg-white min-h-0 overflow-auto border-r-2">
+        <div className="flex-1 bg-white dark:bg-gray-900 min-h-0 overflow-auto border-r-2 dark:border-gray-800">
           <CodeMirror
             value={leftValue}
             height="100%"
@@ -88,15 +88,15 @@ const CodeEditorLayout = ({
       </div>
 
       <div className="h-[50vh] lg:h-full overflow-y-scroll flex flex-col">
-        <div className="py-3 px-4 border-b-2 flex justify-between items-center sticky top-0 z-0">
-          <h3 className="font-medium text-gray-700">{rightTitle}</h3>
+        <div className="py-3 px-4 border-b-2 dark:border-gray-800 flex justify-between items-center sticky top-0 z-0">
+          <h3 className="font-medium text-gray-700 dark:text-gray-200">{rightTitle}</h3>
           <div className="flex gap-2">
             <Button
               isActive={rightLineWrap}
               onClick={() => setRightLineWrap(!rightLineWrap)}
-              className={`flex items-center gap-1 ${rightLineWrap ? 'bg-blue-600 text-white' : ''}`}
+              className={`flex items-center gap-1 ${rightLineWrap ? '' : ''}`}
             >
-              <WrapText className="h-4 w-4" />
+              <WrapText className="h-4 w-4 text-black dark:text-white" />
             </Button>
             <Button
               variant="ghost"
@@ -106,7 +106,7 @@ const CodeEditorLayout = ({
             </Button>
           </div>
         </div>
-        <div className="flex-1 bg-white min-h-0 overflow-auto">
+        <div className="flex-1 bg-white dark:bg-gray-900 min-h-0 overflow-auto">
           {error ? (
             <div className="text-red-500 p-4 bg-red-50 rounded m-4">
               {error}

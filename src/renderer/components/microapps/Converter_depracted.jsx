@@ -385,7 +385,7 @@ const Converter = ({ initialState }) => {
             tooltip="Convert from"
           />
 
-          <span className="text-gray-400">→</span>
+          <span className="text-gray-400 dark:text-gray-700 dark:text-gray-200">→</span>
 
           {/* Target format selector - only show valid targets */}
           <SelectMenu
@@ -401,11 +401,11 @@ const Converter = ({ initialState }) => {
       <div className="flex-1 flex flex-col lg:grid lg:grid-cols-2 min-h-0">
         {/* Input panel */}
         <div className="h-[50vh] lg:h-full overflow-y-scroll flex flex-col">
-          <div className="py-3 pl-4 border-b-2 border-r-2 flex gap-3 justify-start items-center sticky top-0 z-0">
-            <h3 className="font-medium text-gray-700">{fromFormat.label}</h3>
+          <div className="py-3 pl-4 border-b-2 dark:border-gray-800 border-r-2 dark:border-gray-800 flex gap-3 justify-start items-center sticky top-0 z-0">
+            <h3 className="font-medium text-gray-700 dark:text-gray-200">{fromFormat.label}</h3>
             {/* ... buttons remain the same ... */}
           </div>
-          <div className="flex-1 min-h-0 overflow-auto border-r-2">
+          <div className="flex-1 min-h-0 overflow-auto border-r-2 dark:border-gray-800">
             <CodeMirror
               value={input}
               height="100%"
@@ -418,8 +418,8 @@ const Converter = ({ initialState }) => {
 
         {/* Output panel */}
         <div className="h-[50vh] lg:h-full overflow-y-scroll flex flex-col">
-          <div className="py-3 px-4 border-b-2 flex gap-3 items-center sticky top-0 z-0">
-            <h3 className="font-medium text-gray-700">{toFormat.label}</h3>
+          <div className="py-3 px-4 border-b-2 dark:border-gray-800 flex gap-3 items-center sticky top-0 z-0">
+            <h3 className="font-medium text-gray-700 dark:text-gray-200">{toFormat.label}</h3>
             {/* ... buttons remain the same ... */}
           </div>
           <div className="flex-1 min-h-0 overflow-auto">

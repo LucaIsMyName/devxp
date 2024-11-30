@@ -217,9 +217,9 @@ const DBViewer = ({ initialState }) => {
         {!dbPath ? (
           <div className="flex-1 flex items-center justify-center">
             <div className="text-center p-8">
-              <Database className="h-16 w-16 mx-auto mb-4 text-gray-400" />
+              <Database className="h-16 w-16 mx-auto mb-4 text-gray-400 dark:text-gray-700 dark:text-gray-200" />
               <h2 className="text-xl font-semibold mb-2">Import a Database File</h2>
-              <p className="text-gray-600 mb-4">
+              <p className="text-gray-600 dark:text-gray-300 mb-4">
                 Supported formats: SQLite, MySQL dumps, PostgreSQL dumps, MongoDB exports
               </p>
               <Button
@@ -234,7 +234,7 @@ const DBViewer = ({ initialState }) => {
         ) : (
           <div className="flex-1 grid grid-cols-4 min-h-0">
             {/* Tables Sidebar */}
-            <div className="col-span-1 border-r-2 overflow-y-auto bg-gray-50">
+            <div className="col-span-1 border-r-2 dark:border-gray-800 overflow-y-auto bg-gray-50 dark:bg-gray-black">
               <div className="p-4">
                 <h2 className="font-semibold mb-4 flex items-center gap-2">
                   <TableIcon className="h-4 w-4" />
@@ -250,7 +250,7 @@ const DBViewer = ({ initialState }) => {
                       `}
                     >
                       <div className="font-medium">{table.name}</div>
-                      <div className="text-xs text-gray-500">
+                      <div className="text-xs text-gray-50 dark:text-gray-black0 dark:text-gray-200">
                         {table.rowCount.toLocaleString()} rows
                       </div>
                     </button>
@@ -263,12 +263,12 @@ const DBViewer = ({ initialState }) => {
             <div className="col-span-3 overflow-hidden flex flex-col">
               {isLoading ? (
                 <div className="flex-1 flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500" />
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 dark:border-gray-800 border-blue-500" />
                 </div>
               ) : activeTable ? (
                 <div className="flex-1 flex flex-col min-h-0">
                   {/* Table Header */}
-                  <div className="p-4 border-b flex items-center justify-between bg-white">
+                  <div className="p-4 border-b flex items-center justify-between bg-white dark:bg-gray-900">
                     <h3 className="font-semibold text-lg">{activeTable}</h3>
                     {editedCells.size > 0 && (
                       <button
@@ -285,13 +285,13 @@ const DBViewer = ({ initialState }) => {
                   <div className="flex-1 overflow-auto p-4">
                     <div className="rounded-lg border">
                       <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
+                        <thead className="bg-gray-50 dark:bg-gray-black">
                           {table.getHeaderGroups().map(headerGroup => (
                             <tr key={headerGroup.id}>
                               {headerGroup.headers.map(header => (
                                 <th
                                   key={header.id}
-                                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                  className="px-6 py-3 text-left text-xs font-medium text-gray-50 dark:text-gray-black0 dark:text-gray-200 uppercase tracking-wider"
                                 >
                                   {header.isPlaceholder
                                     ? null
@@ -304,13 +304,13 @@ const DBViewer = ({ initialState }) => {
                             </tr>
                           ))}
                         </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
+                        <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200">
                           {table.getRowModel().rows.map(row => (
                             <tr key={row.id}>
                               {row.getVisibleCells().map(cell => (
                                 <td
                                   key={cell.id}
-                                  className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                                  className="px-6 py-4 whitespace-nowrap text-sm text-gray-50 dark:text-gray-black0 dark:text-gray-200"
                                 >
                                   {flexRender(
                                     cell.column.columnDef.cell,
@@ -326,7 +326,7 @@ const DBViewer = ({ initialState }) => {
                   </div>
 
                   {/* Pagination */}
-                  <div className="border-t bg-white p-4 flex items-center justify-between">
+                  <div className="border-t bg-white dark:bg-gray-900 p-4 flex items-center justify-between">
                     <button
                       onClick={() => table.previousPage()}
                       disabled={!table.getCanPreviousPage()}
@@ -334,7 +334,7 @@ const DBViewer = ({ initialState }) => {
                     >
                       Previous
                     </button>
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-gray-600 dark:text-gray-300">
                       Page {table.getState().pagination.pageIndex + 1} of{" "}
                       {table.getPageCount()}
                     </span>
@@ -348,7 +348,7 @@ const DBViewer = ({ initialState }) => {
                   </div>
                 </div>
               ) : (
-                <div className="flex-1 flex items-center justify-center text-gray-500">
+                <div className="flex-1 flex items-center justify-center text-gray-50 dark:text-gray-black0 dark:text-gray-200">
                   Select a table to view its data
                 </div>
               )}

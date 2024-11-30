@@ -8,7 +8,7 @@ import "tippy.js/animations/shift-away.css";
 const Tooltip = ({ children, content, placement = "top", trigger = "mouseenter", theme = "dark", interactive = false, arrow = false, offset = [0, 0], className = "", visible, onClickOutside, ...props }) => {
   return (
     <Tippy
-      content={content}
+      content={<div className="">{content}</div>}
       placement={placement}
       trigger={trigger}
       theme={theme}
@@ -20,7 +20,7 @@ const Tooltip = ({ children, content, placement = "top", trigger = "mouseenter",
       onClickOutside={onClickOutside}
       animation="shift-away"
       {...props}>
-      <div>{children}</div>
+      <div className="">{children}</div>
     </Tippy>
   );
 };

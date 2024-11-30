@@ -138,7 +138,7 @@ const InAppBrowser = () => {
   const TabItem = ({ tab }) => (
     <div data-component="InAppBrowser/TabItem" className={`
       group relative flex items-center gap-2 rounded
-      ${activeTabId === tab.id ? 'bg-white' : 'bg-gray-50 hover:bg-gray-50'}
+      ${activeTabId === tab.id ? 'bg-white dark:bg-gray-900' : 'bg-gray-50 dark:bg-gray-black hover:bg-gray-50 dark:bg-gray-black'}
     `}>
       <Button
         onClick={() => handleTabClick(tab.id)}
@@ -303,9 +303,9 @@ const InAppBrowser = () => {
                 value={urlInput}
                 onChange={(e) => setUrlInput(e.target.value)}
                 placeholder="Search or enter website name"
-                className="w-full flex-1 lg:w-[360px] pl-10 pr-4 py-2 bg-white truncate"
+                className="w-full flex-1 lg:w-[360px] pl-10 pr-4 py-2 bg-white dark:bg-gray-900 truncate"
               />
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-700 dark:text-gray-200" />
             </div>
           </form>
         </div>
@@ -327,7 +327,7 @@ const InAppBrowser = () => {
 
       {/* Browser Content */}
       {activeTab && (
-        <div className="flex-1 sm:border-2 sm:rounded sm:mx-4">
+        <div className="flex-1 sm:border-2 dark:border-gray-800 sm:rounded sm:mx-4">
           <webview
             ref={webviewRef}
             src={activeTab.url}

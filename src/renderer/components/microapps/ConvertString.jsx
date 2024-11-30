@@ -23,15 +23,14 @@ const ConvertString = () => {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        return parsed.conversionType || 'kebab-to-camel';
+        return CONVERSION_OPTIONS.find(opt => opt.value === parsed.conversionType) || CONVERSION_OPTIONS[0];
       }
     } catch (e) {
       console.error('Error loading saved state:', e);
     }
-    return 'kebab-to-camel';
+    return CONVERSION_OPTIONS[0];
   });
 
-  // Load initial input from storage
   const [input, setInput] = useState(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -51,16 +50,17 @@ const ConvertString = () => {
   // Save state to localStorage
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      conversionType,
+      conversionType: conversionType.value,
       input
     }));
   }, [conversionType, input]);
+
   // Case conversion functions
   const kebabToCamel = (str) =>
     str.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
 
   const camelToKebab = (str) =>
-    str.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
+    str.replace(/([A-Z])/g, letter => `-${letter.toLowerCase()}`);
 
   const camelToPascal = (str) =>
     str.charAt(0).toUpperCase() + str.slice(1);
@@ -80,12 +80,11 @@ const ConvertString = () => {
       .toLowerCase()
       .substring(1);
 
-
   const convertLine = (line) => {
     if (!line?.trim()) return '';
 
     try {
-      switch (conversionType) {
+      switch (conversionType.value) {
         case 'kebab-to-camel':
           return kebabToCamel(line);
         case 'camel-to-kebab':
@@ -134,23 +133,20 @@ const ConvertString = () => {
     }
   }, [conversionType]);
 
-  // Get current conversion option for display
-  const currentOption = CONVERSION_OPTIONS.find(opt => opt.value === conversionType) || CONVERSION_OPTIONS[0];
-
   return (
     <div data-component="ConvertString" className="h-screen flex flex-col">
       <div className="flex items-center gap-4 p-4 pb-0">
         <SelectMenu
           options={CONVERSION_OPTIONS}
-          value={conversionType}  // Just pass the value string
-          onChange={setConversionType}  // Directly update the value
+          value={conversionType.value}
+          onChange={(option) => setConversionType(option)}
           className="min-w-[220px]"
         />
       </div>
 
       <CodeEditorLayout
-        leftTitle={currentOption.label.split(' → ')[0]}
-        rightTitle={currentOption.label.split(' → ')[1]}
+        leftTitle={conversionType.label.split(' → ')[0]}
+        rightTitle={conversionType.label.split(' → ')[1]}
         leftValue={input}
         rightValue={output}
         onLeftChange={(value) => {

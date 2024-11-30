@@ -24,7 +24,7 @@ const SelectMenu = ({ options, value, onChange, tooltip, className }) => {
       <Tooltip content={tooltip} placement="bottom" theme="light">
         <Button
           onClick={() => setIsOpen(!isOpen)}
-          className={` px-3 font-mono py-2 border-2 rounded-lg shadow-sm bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center gap-2 min-w-[120px] w-full justify-between ${className}`}
+          className={` px-3 font-mono py-2 border-2 dark:border-gray-800 rounded-lg shadow-sm bg-white dark:bg-gray-900 hover:bg-gray-50 dark:bg-gray-black focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center gap-2 min-w-[120px] w-full justify-between ${className}`}
         >
           <span className=" truncate ">{selectedOption?.label}</span>
           <svg
@@ -39,11 +39,11 @@ const SelectMenu = ({ options, value, onChange, tooltip, className }) => {
       </Tooltip>
 
       {isOpen && (
-        <div className="absolute z-10 bg-white rounded-lg border-2 overflow-hidden mt-1 w-full ">
+        <div className="absolute z-10 bg-white dark:bg-gray-900 rounded-lg border-2 dark:border-gray-800 overflow-hidden mt-1 w-full ">
           {options.map((option) => (
             <Button
               key={option.value}
-              className={`w-full border-0 border-transparent border-b-2 rounded-none truncate ${option.value === value ? 'bg-gray-100/80 font-semibold' : 'text-gray-700'
+              className={`w-full !border-0 !border-transparent !border-b-2 dark:border-gray-800 rounded-none truncate ${option.value === value ? 'bg-gray-100/80 font-semibold' : 'text-gray-700 dark:text-gray-200'
                 }`}
               onClick={() => {
                 onChange(option);

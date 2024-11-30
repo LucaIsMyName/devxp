@@ -52,10 +52,10 @@ const HashGenerator = () => {
   };
 
   return (
-    <div data-component="HashGenerator" className="mx-auto p-6 space-y-6 ">
+    <div data-component="HashGenerator" className=" p-4 space-y-6">
       {/* Input field */}
       <div className="space-y-2">
-        <label htmlFor="input" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="input" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
           Text to hash
         </label>
         <textarea
@@ -65,10 +65,10 @@ const HashGenerator = () => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Enter text to generate hashes..."
-          className="w-full border-2 p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full border-2 dark:border-gray-800 p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
         {/* Input length indicator */}
-        <div className="text-sm text-gray-500">
+        <div className="text-sm text-gray-50 dark:text-gray-black0 dark:text-gray-200">
           Input length: {input.length} characters
         </div>
       </div>
@@ -78,20 +78,20 @@ const HashGenerator = () => {
         {hashTypes.map(({ name }) => (
           <div
             key={name}
-            className="bg-white border-2 shadow-xs p-4 rounded-lg space-y-1"
+            className="bg-white dark:bg-gray-900 border-2 dark:border-gray-800 shadow-xs p-4 rounded-lg space-y-1"
           >
             <div className="flex justify-between items-center">
               <div className='flex items-center w-full justify-between'>
-                <label className="text-sm font-medium text-gray-700">
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
                   {name}
                 </label>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-gray-50 dark:text-gray-black0 dark:text-gray-200">
                   {getHashLength(name)} characters
                 </p>
               </div>
 
             </div>
-            <div className="relative p-1 px-2 text-green-300 bg-black/90 border-2 border-black font-semibold rounded-lg shadow-sm rounded-lg border-black/10 border-2 w-full ">
+            <div className="relative p-1 px-2 text-green-300 bg-black/90 border-2 dark:border-gray-800 border-black font-semibold rounded-lg shadow-sm rounded-lg border-black/10 border-2 dark:border-gray-800 w-full ">
               <span className='font-mono text-xs break-all'>{hashes[name] || 'No hash generated yet'}</span>
               <button
                 onClick={() => copyToClipboard(name, hashes[name])}
@@ -102,7 +102,7 @@ const HashGenerator = () => {
                 {copiedStates[name] ? (
                   <Check strokeWidth={2} className="h-4 w-4 text-green-600" />
                 ) : (
-                  <Copy strokeWidth={2} className="h-4 w-4 text-gray-600" />
+                  <Copy strokeWidth={2} className="h-4 w-4 text-gray-600 dark:text-gray-300" />
                 )}
               </button>
             </div>

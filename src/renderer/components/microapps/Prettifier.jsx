@@ -1,20 +1,22 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { debounce } from 'lodash';
 import CodeMirror from '@uiw/react-codemirror';
+import Button from '../partials/Button';
+import { RotateCcw, Copy } from 'lucide-react';
 import { javascript } from '@codemirror/lang-javascript';
 import { html } from '@codemirror/lang-html';
 import { css } from '@codemirror/lang-css';
 import { EditorView } from '@codemirror/view';
 import { lineNumbers } from '@codemirror/view';
+import { lightTheme } from '../../../config';
 import JsonView from '@uiw/react-json-view';
 import Tooltip from '../partials/Tooltip';
 import SelectMenu from '../partials/SelectMenu';
 import useAppStore from '../../store/appStore';
 import prettier from 'prettier/standalone';
-import parserBabel from 'prettier/parser-babel';
+import babelParser from 'prettier/parser-babel';
 import htmlParser from 'prettier/parser-html';
-import parserCss from 'prettier/parser-postcss';
-import { lightTheme } from '../../../config';
+import cssParser from 'prettier/parser-postcss';
 
 const FORMAT_OPTIONS = [
   { value: 'json', label: 'JSON', views: ['pretty', 'tree'], extension: () => javascript() },
@@ -28,60 +30,6 @@ const VIEW_OPTIONS = [
   { value: 'tree', label: 'Tree View' }
 ];
 
-// Updated formatters to use imported Prettier
-// const formatters = {
-//   json: (str, isTreeView) => {
-//     try {
-//       const parsed = JSON.parse(str.trim());
-//       return isTreeView ? parsed : JSON.stringify(parsed, null, 2);
-//     } catch (error) {
-//       throw new Error('Invalid JSON: ' + error.message);
-//     }
-//   },
-  
-//   javascript: (str) => {
-//     try {
-//       return prettier.format(str, {
-//         parser: 'babel',
-//         plugins: [parserBabel],
-//         printWidth: 80,
-//         tabWidth: 2,
-//         semi: true,
-//         singleQuote: true
-//       });
-//     } catch (error) {
-//       throw new Error('Invalid JavaScript: ' + error.message);
-//     }
-//   },
-
-//   html: (str) => {
-//     try {
-//       return prettier.format(str.trim(), {
-//         parser: 'html',
-//         plugins: [parserHtml],
-//         printWidth: 80,
-//         tabWidth: 2,
-//         htmlWhitespaceSensitivity: 'css'
-//       });
-//     } catch (error) {
-//       throw new Error('Invalid HTML: ' + error.message);
-//     }
-//   },
-
-//   css: (str) => {
-//     try {
-//       return prettier.format(str, {
-//         parser: 'css',
-//         plugins: [parserCss],
-//         printWidth: 80,
-//         tabWidth: 2
-//       });
-//     } catch (error) {
-//       throw new Error('Invalid CSS: ' + error.message);
-//     }
-//   }
-// };
-
 const formatters = {
   json: (str, isTreeView) => {
     try {
@@ -91,7 +39,7 @@ const formatters = {
       throw new Error('Invalid JSON: ' + error.message);
     }
   },
-  
+
   javascript: (str) => {
     try {
       return prettier.format(str, {
@@ -100,7 +48,8 @@ const formatters = {
         printWidth: 80,
         tabWidth: 2,
         semi: true,
-        singleQuote: true
+        singleQuote: true,
+        trailingComma: 'es5'
       });
     } catch (error) {
       throw new Error('Invalid JavaScript: ' + error.message);
@@ -109,25 +58,19 @@ const formatters = {
 
   html: (str) => {
     try {
-      // Pre-process the HTML to fix empty tags and normalize spacing
-      const processedStr = str
-        .replace(/>\s+</g, '>\n<') // Add newlines between tags
-        .replace(/<([a-zA-Z]+)><\/([a-zA-Z]+)>/g, (match, p1, p2) => {
-          // Only replace if opening and closing tags match
-          return p1 === p2 ? `<${p1}></${p1}>` : match;
-        })
-        .trim();
-
-      return prettier.format(processedStr, {
+      return prettier.format(str.trim(), {
         parser: 'html',
         plugins: [htmlParser],
         printWidth: 80,
         tabWidth: 2,
         useTabs: false,
-        htmlWhitespaceSensitivity: 'strict',
-        bracketSameLine: false,
+        htmlWhitespaceSensitivity: 'css',
+        bracketSameLine: true,
         singleAttributePerLine: false,
-        singleQuote: false
+        bracketSpacing: true,
+        // These options help prevent the weird newline issues
+        proseWrap: 'never',
+        endOfLine: 'lf'
       });
     } catch (error) {
       throw new Error('Invalid HTML: ' + error.message);
@@ -140,13 +83,55 @@ const formatters = {
         parser: 'css',
         plugins: [cssParser],
         printWidth: 80,
-        tabWidth: 2
+        tabWidth: 2,
+        useTabs: false,
+        singleQuote: false
       });
     } catch (error) {
       throw new Error('Invalid CSS: ' + error.message);
     }
   }
 };
+
+const isValidInput = (str, format) => {
+  if (!str.trim()) return true;
+
+  try {
+    switch (format) {
+      case 'json':
+        JSON.parse(str);
+        return true;
+
+      case 'javascript':
+        // More lenient JS validation that allows declarations and expressions
+        prettier.format(str, {
+          parser: 'babel',
+          plugins: [babelParser]
+        });
+        return true;
+
+      case 'html':
+        prettier.format(str, {
+          parser: 'html',
+          plugins: [htmlParser]
+        });
+        return true;
+
+      case 'css':
+        prettier.format(str, {
+          parser: 'css',
+          plugins: [cssParser]
+        });
+        return true;
+
+      default:
+        return true;
+    }
+  } catch (error) {
+    return false;
+  }
+};
+
 
 const Prettifier = ({ initialState }) => {
   // Get the persisted state from the store
@@ -214,7 +199,7 @@ const Prettifier = ({ initialState }) => {
 
     if (!output) {
       return (
-        <div className="text-gray-400 p-4">
+        <div className="text-gray-400 dark:text-gray-700 dark:text-gray-200 p-4">
           Enter some code to see the formatted output
         </div>
       );
@@ -364,13 +349,13 @@ const Prettifier = ({ initialState }) => {
         // Still show the input in the output area when there's an error
         setOutput(value);
       }
-    }, 1000),
+    }, 100),
     [format, view]
   );
 
   return (
     <div data-component="Prettifier" className="h-screen flex flex-col">
-      {/* Header with controls */} 
+      {/* Header with controls */}
       <div className="flex flex-wrap items-center gap-4 p-4 pb-0">
         <div className="flex flex-wrap items-center gap-4">
           <SelectMenu
@@ -407,21 +392,23 @@ const Prettifier = ({ initialState }) => {
       <div className="flex-1 flex flex-col lg:grid lg:grid-cols-2 min-h-0">
         {/* Input panel */}
         <div className="h-[50vh] lg:h-full overflow-y-scroll flex flex-col">
-          <div className="py-3 pl-4 border-b-2 border-r-2 flex gap-3 justify-start items-center sticky top-0 z-0">
-            <h3 className="font-medium text-gray-700">Input</h3>
-            <Tooltip content="Clear input" placement="top" theme="light">
-              <button
-                onClick={() => {
-                  setInput('');
-                  setOutput('');
-                  setError(null);
-                }}
-                className="px-[0.3em] py-[0em] rounded border-2 text-[11px] text-gray-600 hover:text-gray-900">
-                Clear
-              </button>
-            </Tooltip>
+          <div className="py-3 px-4 border-b-2 dark:border-gray-800 border-r-2 dark:border-gray-800 flex gap-3 justify-between items-center sticky top-0 z-0">
+            <h3 className="font-medium text-gray-700 dark:text-gray-200">Input</h3>
+            <div>
+              <Tooltip content="Clear input" placement="top" theme="light">
+                <Button
+                  onClick={() => {
+                    setInput('');
+                    setOutput('');
+                    setError(null);
+                  }}
+                  className="px-0 py-0 rounded border-0 border-transparent bg-[rgba(0,0,0,0)] shadow-none text-[11px] text-gray-600 dark:text-gray-300 hover:text-gray-900">
+                  <RotateCcw className='size-4' />
+                </Button>
+              </Tooltip>
+            </div>
           </div>
-          <div className="flex-1 min-h-0 overflow-auto border-r-2 select-text">
+          <div className="flex-1 min-h-0 overflow-auto border-r-2 dark:border-gray-800 select-text">
             <CodeMirror
               value={input}
               height="100%"
@@ -434,16 +421,20 @@ const Prettifier = ({ initialState }) => {
 
         {/* Output panel */}
         <div className="h-[50vh] lg:h-full overflow-y-scroll flex flex-col ">
-          <div className="py-3 px-4 border-b-2 border-b-2 flex gap-3 items-center sticky top-0 z-0">
-            <h3 className="font-medium text-gray-700">Output</h3>
+          <div className="py-3 px-4 border-b-2 dark:border-gray-800 border-b-2 dark:border-gray-800 flex gap-3 items-center justify-between">
+            <h3 className="font-medium text-gray-700 dark:text-gray-200">Output</h3>
             {output && (
-              <Tooltip content="Copy to clipboard" placement="top" theme="light">
-                <button
-                  className="px-[0.3em] py-[0em] text-[11px] text-black rounded border-2 hover:bg-blue-100"
-                  onClick={copyToClipboard}>
-                  Copy
-                </button>
+              <div>
+              <Tooltip content="Copy to Clipboard" placement="top" theme="light">
+                <Button
+                  onClick={() => {
+                    copyToClipboard();
+                  }}
+                  className="px-0 py-0 rounded border-0 border-transparent bg-[rgba(0,0,0,0)] shadow-none text-[11px] text-gray-600 dark:text-gray-300 hover:text-gray-900">
+                  <Copy className='size-4' />
+                </Button>
               </Tooltip>
+            </div>
             )}
           </div>
           <div className="flex-1 min-h-0 overflow-auto select-text">

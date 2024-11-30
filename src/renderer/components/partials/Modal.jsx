@@ -25,10 +25,10 @@ const Modal = ({
       onClick={onClose}
     >
       <div 
-        className={`bg-white shadow-lg border-2 rounded-lg shadow-xl w-full ${sizeClasses}`}
+        className={`bg-white dark:bg-gray-900 shadow-lg border-2 dark:border-gray-800 rounded-lg shadow-xl w-full ${sizeClasses}`}
         onClick={e => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between p-4 border-b-2">
+        <div className="flex items-center justify-between p-4 border-b-2 dark:border-gray-800">
           <h2 className="text-lg font-medium">{title}</h2>
           <Button
             variant="ghost"

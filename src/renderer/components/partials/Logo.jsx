@@ -9,7 +9,7 @@ const Logo = ({ size = "", color }) => {
             size === "sm"
               ? "text-sm" :
               "text-base"
-        } uppercase ${color | 'text-blue-600'}`}>Dev</span>
+        } uppercase ${color | 'text-blue-600 dark:text-blue-300 dark:text-blue-600 dark:text-blue-300 dark:text-blue-700'}`}>Dev</span>
       <span className={`font-mono ${size === 'lg'
           ? "text-lg" :
           size === "md"

@@ -205,7 +205,7 @@ const WebReader = ({ initialState }) => {
         <section className='flex flex-wrap gap-4 items-center'>
           <form onSubmit={handleSubmit} className="flex-1 flex  lg:space-y-0 gap-4 items-center">
             <div className="flex-1 relative">
-              <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-700 dark:text-gray-200 w-4 h-4" />
               <Input
                 type="text"
                 value={url}
@@ -245,10 +245,10 @@ const WebReader = ({ initialState }) => {
 
         {/* Recent URLs */}
         {recentUrls.length > 0 && (
-          <div className="border-2 sm:flex items-center gap-4 my-4 px-4 rounded-lg bg-gray-100 pb-4 pt-4">
+          <div className="border-2 dark:border-gray-800 sm:flex items-center gap-4 my-4 px-4 rounded-lg bg-gray-100 pb-4 pt-4">
             <div className="flex items-center justify-between mb-2 sm:mb-0">
-              <div className="flex items-center text-xs font-mono uppercase gap-2 text-gray-600">
-                <History strokeWidth={2.25} className="text-gray-400 w-4 h-4" />
+              <div className="flex items-center text-xs font-mono uppercase gap-2 text-gray-600 dark:text-gray-300">
+                <History strokeWidth={2.25} className="text-gray-400 dark:text-gray-700 dark:text-gray-200 w-4 h-4" />
                 Recent 
               </div>
 
@@ -276,7 +276,7 @@ const WebReader = ({ initialState }) => {
 
         {/* Error Message */}
         {error && (
-          <div className="bg-red-50 border-2 border-red-200 rounded-lg p-4 flex items-center gap-3">
+          <div className="bg-red-50 border-2 dark:border-gray-800 border-red-200 rounded-lg p-4 flex items-center gap-3">
             <AlertTriangle className="w-5 h-5 text-red-500" />
             <p className="text-red-600">{error}</p>
           </div>
@@ -298,16 +298,16 @@ const WebReader = ({ initialState }) => {
             </div>
 
             {article.subtitle && (
-              <h2 className="text-xl text-gray-600 mb-6">{article.subtitle}</h2>
+              <h2 className="text-xl text-gray-600 dark:text-gray-300 mb-6">{article.subtitle}</h2>
             )}
 
-            <div className="text-sm text-gray-500 mb-8 flex items-center gap-2">
+            <div className="text-sm text-gray-50 dark:text-gray-black0 dark:text-gray-200 mb-8 flex items-center gap-2">
               <Globe className="w-4 h-4" />
               <a
                 href={article.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 underline"
+                className="text-blue-600 dark:text-blue-300 dark:text-blue-600 dark:text-blue-300 dark:text-blue-700 underline"
               >
                 {new URL(article.url).hostname + article.url.split(new URL(article.url).hostname)[1]}
               </a>
@@ -326,7 +326,7 @@ const WebReader = ({ initialState }) => {
 
                   case 'paragraph':
                     return (
-                      <p key={index} className="text-gray-700 leading-relaxed">
+                      <p key={index} className="text-gray-700 dark:text-gray-200 leading-relaxed">
                         {section.content}
                       </p>
                     );
@@ -334,7 +334,7 @@ const WebReader = ({ initialState }) => {
                   case 'image':
                     return (
                       <figure key={index} className="my-6">
-                        <div className="relative bg-gray-100 border-2 rounded-lg overflow-hidden">
+                        <div className="relative bg-gray-100 border-2 dark:border-gray-800 rounded-lg overflow-hidden">
                           <img
                             src={section.src}
                             alt={section.alt}
@@ -342,7 +342,7 @@ const WebReader = ({ initialState }) => {
                             onError={(e) => {
                               // Fallback for failed images
                               e.target.parentElement.innerHTML = `
-                                <div class="flex items-center justify-center p-8 text-gray-400">
+                                <div class="flex items-center justify-center p-8 text-gray-400 dark:text-gray-700 dark:text-gray-200">
                                   <span class="flex items-center gap-2">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -355,7 +355,7 @@ const WebReader = ({ initialState }) => {
                           />
                         </div>
                         {section.caption && (
-                          <figcaption className="text-sm text-gray-500 text-center mt-2">
+                          <figcaption className="text-sm text-gray-50 dark:text-gray-black0 dark:text-gray-200 text-center mt-2">
                             {section.caption}
                           </figcaption>
                         )}
@@ -364,7 +364,7 @@ const WebReader = ({ initialState }) => {
 
                   case 'quote':
                     return (
-                      <blockquote key={index} className="border-l-4 border-gray-300 pl-4 italic text-gray-600">
+                      <blockquote key={index} className="border-l-4 border-gray-300 pl-4 italic text-gray-600 dark:text-gray-300">
                         {section.content}
                       </blockquote>
                     );

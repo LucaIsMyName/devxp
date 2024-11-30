@@ -2,7 +2,7 @@
 
 **This App is in beta and won't work as expected on your machine**
 
-`DevXp` is an al-in-one app for development utilities like DNS, ping, prettifiying, converting data-formts or strings, generating CSS custom property/llibrary themes, ...
+`DevXp` is an al-in-one app for development utilities like DNS, ping, prettifiying, converting data-formts or strings, generating CSS custom property/library themes, ...
 
 ## To-Do and Bugs
 - switch everything to `.ts`

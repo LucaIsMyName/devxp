@@ -75,48 +75,48 @@ const AppContent = () => {
   }, [isDrawerOpen]);
 
   return (
-    <div className="relative flex min-h-screen bg-gray-50/50 overflow-y-scroll select-none">
-      <Sidebar
-        className="w-full sm:max-w-lg h-screen"
-        activeApps={MICRO_APPS}
-        onAppSelect={(app) => setActiveApp(app.component)}
-        onDevXPClick={() => setIsDrawerOpen(true)}
+    <div className="relative flex h-screen bg-gray-50 dark:bg-gray-black/50 dark:bg-gray-950 dark:text-white overflow-hidden select-none">
 
-      />
-      <Main className="flex-1 relative ml-[72px] lg:ml-0">
-        <Routes>
-          <Route
-            path="/"
-            element={<Navigate to="/app/prettifier" replace />}
-          />
-          {MICRO_APPS.map((app) => (
+        <Sidebar
+          className="w-full sm:max-w-lg h-screen"
+          activeApps={MICRO_APPS}
+          onAppSelect={(app) => setActiveApp(app.component)}
+          onDevXPClick={() => setIsDrawerOpen(true)}
+        />
+        <Main className="flex-1 md:ml-[72px] lg:ml-0">
+          <Routes>
             <Route
-              key={app.component}
-              path={`/app/${app.component.toLowerCase()}`}
-              element={
-                React.createElement(COMPONENT_MAP[app.component], {
-                  initialState: useAppStore.getState().getMicroAppState(app.component)
-                })
-              }
+              path="/"
+              element={<Navigate to="/app/dnschecker" replace />}
             />
-          ))}
-        </Routes>
-      </Main>
-      <SideDrawer
-        title={<div>DevXp Info</div>}
-        isOpen={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
-      >
-        <AppInfo />
-        {markdownUrl && (
-          <MdToHtml
-            url={markdownUrl}
-            className="w-full overflow-y-auto"
-          />
-        )}
-      </SideDrawer>
+            {MICRO_APPS.map((app) => (
+              <Route
+                key={app.component}
+                path={`/app/${app.component.toLowerCase()}`}
+                element={
+                  React.createElement(COMPONENT_MAP[app.component], {
+                    initialState: useAppStore.getState().getMicroAppState(app.component)
+                  })
+                }
+              />
+            ))}
+          </Routes>
+        </Main>
+        <SideDrawer
+          title={<div>DevXp Info</div>}
+          isOpen={isDrawerOpen}
+          onClose={() => setIsDrawerOpen(false)}
+        >
+          <AppInfo />
+          {markdownUrl && (
+            <MdToHtml
+              url={markdownUrl}
+              className="w-full overflow-y-auto"
+            />
+          )}
+        </SideDrawer>
     </div>
-  )
+  );
 }
 
 // Main App component
