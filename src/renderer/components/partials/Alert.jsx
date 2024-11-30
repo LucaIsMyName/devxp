@@ -9,7 +9,7 @@ const Alert = ({ title, message, variant = 'info', onDismiss, className }) => {
   }[variant];
 
   return (
-    <div data-component="Alert" className={`p-4 rounded-lg border ${bgColor} relative select-text ${className}`}>
+    <div data-component="Alert" className={`p-4 rounded-lg border-2 ${bgColor} relative select-text ${className}`}>
       <div className="flex gap-2 items-start">
         <FileWarning className="h-5 w-5 flex-shrink-0 mt-0.5" />
         <div className="flex-1">

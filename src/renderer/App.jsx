@@ -1,4 +1,4 @@
-// import { scan } from 'react-scan';
+import { scan } from 'react-scan';
 import React, { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { MICRO_APPS } from '../config'
@@ -30,12 +30,12 @@ import GenerateCss from './components/microapps/GenerateCss'
 
 import initSqlJs from 'sql.js';
 
-// if (typeof window !== 'undefined') {
-//   scan({
-//     enabled: true,
-//     log: true, // logs render info to console (default: false)
-//   });
-// }
+
+scan({
+  enabled: true,
+  log: true, // logs render info to console (default: false)
+});
+
 
 // In your main app initialization
 // await initSqlJs({
@@ -85,44 +85,44 @@ const AppContent = () => {
   return (
     <div className="relative flex h-screen bg-gray-50 dark:bg-gray-black/50 dark:bg-gray-950 dark:text-white overflow-hidden select-none">
 
-        <Sidebar
-          className="w-full sm:max-w-lg h-screen"
-          activeApps={MICRO_APPS}
-          onAppSelect={(app) => setActiveApp(app.component)}
-          onDevXPClick={() => setIsDrawerOpen(true)}
-        />
-        <Main className="flex-1 md:ml-[72px] lg:ml-0">
-          <Routes>
+      <Sidebar
+        className="w-full sm:max-w-lg h-screen"
+        activeApps={MICRO_APPS}
+        onAppSelect={(app) => setActiveApp(app.component)}
+        onDevXPClick={() => setIsDrawerOpen(true)}
+      />
+      <Main className="flex-1 md:ml-[72px] lg:ml-0">
+        <Routes>
+          <Route
+            path="/"
+            element={<Navigate to="/app/dnschecker" replace />}
+          />
+          {MICRO_APPS.map((app) => (
             <Route
-              path="/"
-              element={<Navigate to="/app/dnschecker" replace />}
+              key={app.component}
+              path={`/app/${app.component.toLowerCase()}`}
+              element={
+                React.createElement(COMPONENT_MAP[app.component], {
+                  initialState: useAppStore.getState().getMicroAppState(app.component)
+                })
+              }
             />
-            {MICRO_APPS.map((app) => (
-              <Route
-                key={app.component}
-                path={`/app/${app.component.toLowerCase()}`}
-                element={
-                  React.createElement(COMPONENT_MAP[app.component], {
-                    initialState: useAppStore.getState().getMicroAppState(app.component)
-                  })
-                }
-              />
-            ))}
-          </Routes>
-        </Main>
-        <SideDrawer
-          title={<div>DevXp Info</div>}
-          isOpen={isDrawerOpen}
-          onClose={() => setIsDrawerOpen(false)}
-        >
-          <AppInfo />
-          {markdownUrl && (
-            <MdToHtml
-              url={markdownUrl}
-              className="w-full overflow-y-auto"
-            />
-          )}
-        </SideDrawer>
+          ))}
+        </Routes>
+      </Main>
+      <SideDrawer
+        title={<div>DevXp Info</div>}
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+      >
+        <AppInfo />
+        {markdownUrl && (
+          <MdToHtml
+            url={markdownUrl}
+            className="w-full overflow-y-auto"
+          />
+        )}
+      </SideDrawer>
     </div>
   );
 }

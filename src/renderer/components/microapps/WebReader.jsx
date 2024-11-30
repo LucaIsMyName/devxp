@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Loader2, AlertTriangle, Globe, History, Trash2 } from 'lucide-react';
 import Input from '../partials/Input';
 import Button from '../partials/Button';
+import Alert from '../partials/Alert';
 
 // URL validation helper
 const isValidUrl = (url) => {
@@ -29,6 +30,7 @@ const WebReader = ({ initialState }) => {
   const [error, setError] = useState(null);
   const [recentUrls, setRecentUrls] = useState([]);
   const [favicon, setFavicon] = useState(null);
+  const [imageIsError, setImageIsError] = useState(false);
 
 
   // Load recent URLs and last fetched content from localStorage
@@ -337,19 +339,21 @@ const WebReader = ({ initialState }) => {
                             src={section.src}
                             alt={section.alt}
                             className="max-w-full w-full h-auto mx-auto"
-                            onError={(e) => {
-                              // Fallback for failed images
-                              e.target.parentElement.innerHTML = `
-                                <div class="flex items-center justify-center p-8 text-gray-400 dark:text-gray-700 dark:text-gray-200">
-                                  <span class="flex items-center gap-2">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                    </svg>
-                                    Image failed to load
-                                  </span>
-                                </div>
-                              `;
-                            }}
+                            onError={
+                              () => {
+                                setImageIsError(true)
+
+                                // If image fails to load, try loading the original image
+                                if (imageIsError) {
+                                  const img = new Image();
+                                  img.src = section.originalSrc;
+                                  img.onload = () => {
+                                    setImageIsError(false);
+                                    section.src = proxyUrl(section.originalSrc);
+                                  };
+                                }
+                              }
+                            }
                           />
                         </div>
                         {section.caption && (
