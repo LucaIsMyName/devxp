@@ -409,6 +409,7 @@ const GenerateCss = () => {
           value={selectedLibrary?.value || 'vanilla'}
           onChange={handleLibraryChange}
           className="min-w-[220px]"
+          tooltip={"Select Library"}
         />
         <Button onClick={() => setShowModal(true)} className="flex p-3 items-center gap-2 !border-black/30 !bg-blue-600 dark:bg-blue-400 !text-white">
           <Rocket className="w-4 h-4" />
@@ -441,6 +442,7 @@ const GenerateCss = () => {
               value={selectedLibrary?.value || 'vanilla'}
               onChange={handleLibraryChange}
               className="min-w-[220px]"
+              tooltip={"Select Library"}
             />
             <div className="flex items-center gap-4">
               <label className="flex items-center gap-2">

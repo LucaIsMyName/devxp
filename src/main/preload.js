@@ -1,5 +1,5 @@
-const { contextBridge, ipcRenderer } = require('electron');
-const fs = require('fs').promises;
+import { contextBridge, ipcRenderer } from 'electron';
+import fs from 'fs/promises';
 
 // Expose one single API object
 contextBridge.exposeInMainWorld('electronAPI', {

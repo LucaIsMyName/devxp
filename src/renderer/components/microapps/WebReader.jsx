@@ -245,10 +245,10 @@ const WebReader = ({ initialState }) => {
 
         {/* Recent URLs */}
         {recentUrls.length > 0 && (
-          <div className="border-2 dark:border-gray-800 sm:flex items-center gap-4 my-4 px-4 rounded-lg bg-gray-100 pb-4 pt-4">
+          <div className="border-2 dark:border-gray-800 sm:flex items-center gap-4 my-4 px-4 rounded-lg bg-gray-100 dar:bg-gray-800 pb-4 pt-4">
             <div className="flex items-center justify-between mb-2 sm:mb-0">
-              <div className="flex items-center text-xs font-mono uppercase gap-2 text-gray-600 dark:text-gray-300">
-                <History strokeWidth={2.25} className="text-gray-400 dark:text-gray-700 dark:text-gray-200 w-4 h-4" />
+              <div className="flex items-center text-xs text-gray-400 dark:text-gray-200 font-mono uppercase gap-2 text-gray-600 dark:text-gray-300">
+                <History strokeWidth={2.25} className="text-gray-400 dark:text-gray-200 w-4 h-4" />
                 Recent 
               </div>
 

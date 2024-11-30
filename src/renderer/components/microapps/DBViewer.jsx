@@ -13,6 +13,7 @@ import {
 } from '@tanstack/react-table';
 // Update this import to use the singleton instance
 import { databaseService } from '../../../services/DatabaseService';
+import { Trash2, Plus } from 'lucide-react';
 import useAppStore from '../../store/appStore';
 import Alert from '../partials/Alert';
 import Toast from '../partials/Toast';
@@ -26,9 +27,62 @@ const DBViewer = ({ initialState }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState(null);
   const [editedCells, setEditedCells] = useState(new Map());
+  const [showNewRowForm, setShowNewRowForm] = useState(false);
 
   const updateMicroAppState = useAppStore(state => state.updateMicroAppState);
 
+  const handleAddRow = async (newRowData) => {
+    try {
+      setIsLoading(true);
+      // Insert new row into the database
+      await databaseService.addRow(activeTable, newRowData);
+
+      // Refresh table data
+      const data = await databaseService.getTableData(activeTable);
+      setTableData(data);
+
+      setAlert({
+        title: 'Success',
+        message: 'New row added successfully',
+        variant: 'success'
+      });
+      setShowNewRowForm(false);
+    } catch (error) {
+      setAlert({
+        title: 'Error',
+        message: `Failed to add row: ${error.message}`,
+        variant: 'error'
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const handleDeleteRow = async (rowIndex) => {
+    if (!confirm('Are you sure you want to delete this row?')) return;
+
+    try {
+      setIsLoading(true);
+      await databaseService.deleteRow(activeTable, rowIndex);
+
+      // Refresh table data
+      const data = await databaseService.getTableData(activeTable);
+      setTableData(data);
+
+      setAlert({
+        title: 'Success',
+        message: 'Row deleted successfully',
+        variant: 'success'
+      });
+    } catch (error) {
+      setAlert({
+        title: 'Error',
+        message: `Failed to delete row: ${error.message}`,
+        variant: 'error'
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
   // Initialize from saved state
   useEffect(() => {
     if (initialState?.dbPath) {
@@ -176,8 +230,8 @@ const DBViewer = ({ initialState }) => {
   };
 
   const columns = useMemo(
-    () =>
-      tableData.columns.map(col => ({
+    () => [
+      ...tableData.columns.map(col => ({
         accessorKey: col,
         header: col,
         cell: ({ row, column, getValue }) => {
@@ -195,6 +249,19 @@ const DBViewer = ({ initialState }) => {
           );
         }
       })),
+      {
+        id: 'actions',
+        header: '',
+        cell: ({ row }) => (
+          <Button
+            onClick={() => handleDeleteRow(row.index)}
+            className="text-red-500 hover:text-red-700 p-1"
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        )
+      }
+    ],
     [tableData.columns, editedCells, handleCellEdit]
   );
 
@@ -234,7 +301,7 @@ const DBViewer = ({ initialState }) => {
             </div>
           </div>
         ) : (
-          <div className="flex-1 grid grid-cols-4 min-h-0">
+          <div className="flex-1 flex min-h-0">
             <div className='fixed z-50 flex gap-4 bottom-4 right-4 si-12'>
               {/* Pagination */}
               <div className="bg-white dark:bg-gray-900 flex gap-3 items-center justify-between">
@@ -265,23 +332,25 @@ const DBViewer = ({ initialState }) => {
               </Button>
             </div>
             {/* Tables Sidebar */}
-            <div className="col-span-1 border-r-2 border-t-2 dark:border-gray-800 overflow-auto bg-gray-50 dark:bg-black">
-              <div className="p-4">
-                <h2 className="font-semibold mb-4 flex items-center gap-2">
+            <div className="min-w-[250px] w-[20vw] h-screen overflow-y-scroll max-w-md flex flex-col border-r-2 border-t-2 dark:border-gray-800 bg-gray-50 dark:bg-black">
+              <div className="p-4 border-b-2 dark:border-gray-800">
+                <h2 className="font-semibold flex items-center gap-2">
                   <TableIcon className="h-4 w-4" />
                   Tables ({dbInfo?.tables.length})
                 </h2>
+              </div>
+              <div className="flex-1 overflow-y-auto p-4">
                 <div className="space-y-2">
                   {dbInfo?.tables.map(table => (
                     <Button
                       key={table.name}
                       onClick={() => handleTableSelect(table.name)}
-                      className={`w-full font-normal  p-2 text-left border-2 dark:border-gray-800 rounded hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors
-                        ${activeTable === table.name ? 'bg-blue-50 dark:bg-blue-950 border-2 dark:border-gray-800 border-blue-200' : ''}
-                      `}
+                      className={`w-full font-normal p-2 text-left border-2 dark:border-gray-800 rounded hover:bg-gray-100 
+                        dark:hover:bg-gray-900 transition-colors
+                        ${activeTable === table.name ? 'bg-blue-50 dark:bg-blue-950 border-blue-200' : ''}`}
                     >
                       <div className="font-medium truncate">{table.name}</div>
-                      <div className="text-xs text-gray-50 dark:text-gray-50 dark:text-gray-200">
+                      <div className="text-xs text-gray-500 dark:text-gray-200">
                         {table.rowCount.toLocaleString()} rows
                       </div>
                     </Button>
@@ -291,32 +360,39 @@ const DBViewer = ({ initialState }) => {
             </div>
 
             {/* Table View */}
-            <div className="col-span-3 overflow-hidden flex flex-col">
+            <div className="flex-1 overflow-hidden flex flex-col">
               {isLoading ? (
                 <div className="flex-1 flex items-center justify-center">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 dark:border-gray-800 border-blue-500" />
                 </div>
               ) : activeTable ? (
-                <div className="flex-1 flex flex-col min-h-0 relative">
+                <div className="flex-1 w-full flex flex-col min-h-0 relative">
                   {/* Table Header */}
-                  <div className="p-4 border-b-2 dark:border-gray-800 flex items-center justify-between bg-white dark:bg-gray-900">
+                  <div className="p-4 w-full border-b-2 dark:border-gray-800 flex items-center justify-between bg-white dark:bg-gray-900">
                     <h3 className="font-semibold text-lg">{activeTable}</h3>
                     {editedCells.size > 0 && (
                       <Button
                         onClick={handleSaveChanges}
-                        className="py-1 px-3 bg-green-500 dark:bg-green-900 border-2 dark:border-green-700 dark:text-green200 text-white rounded hover:bg-green-600 flex items-center gap-2"
+                        className="py-1 px-3 flex bg-green-500 dark:bg-green-900 border-2 dark:border-green-700 dark:text-green-200 text-white rounded hover:bg-green-600 flex items-center gap-2"
                       >
                         <Save className="w-4 h-4" />
                         <span className='text-sm'>Save Changes</span>
                       </Button>
                     )}
+                    <Button
+                      onClick={() => setShowNewRowForm(true)}
+                      className="py-1 px-3 flex items-center gap-3 bg-blue-500 dark:bg-blue-900 text-white"
+                    >
+                      <Plus className="h-4 w-4" />
+                      <span className="text-sm">Add Row</span>
+                    </Button>
                   </div>
 
                   {/* Table Content */}
                   <div className="flex-1 overflow-auto p-4">
                     <div className="rounded-lg border-2 dark:border-gray-800">
                       <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50 dark:bg-gray-black">
+                        <thead className="bg-gray-50 dark:bg-gray-black !border-0 border-transparent">
                           {table.getHeaderGroups().map(headerGroup => (
                             <tr key={headerGroup.id} className="!border-0">
                               {headerGroup.headers.map(header => (
