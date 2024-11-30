@@ -185,7 +185,7 @@ const DBViewer = ({ initialState }) => {
           const isEdited = editedCells.has(cellKey);
           return (
             <div
-              className={`p-2 ${isEdited ? 'bg-blue-50' : ''}`}
+              className={`p-2 rounded border-2 dark:border-gray-800 ${isEdited ? 'bg-blue-50 dark:bg-blue-900' : ''}`}
               contentEditable
               suppressContentEditableWarning
               onBlur={(e) => handleCellEdit(row.index, column.id, e.target.textContent)}
@@ -235,7 +235,28 @@ const DBViewer = ({ initialState }) => {
           </div>
         ) : (
           <div className="flex-1 grid grid-cols-4 min-h-0">
-            <div className='fixed bottom-4 right-4 si-12'>
+            <div className='fixed z-50 flex gap-4 bottom-4 right-4 si-12'>
+              {/* Pagination */}
+              <div className="bg-white dark:bg-gray-900 flex gap-3 items-center justify-between">
+                <Button
+                  onClick={() => table.previousPage()}
+                  disabled={!table.getCanPreviousPage()}
+                  className="text-sm font-semibold px-3 py-1 border-2 dark:border-gray-800 rounded disabled:opacity-50"
+                >
+                  Previous
+                </Button>
+                <span className="text-sm text-gray-600 dark:text-gray-300">
+                  Page {table.getState().pagination.pageIndex + 1} of{" "}
+                  {table.getPageCount()}
+                </span>
+                <Button
+                  onClick={() => table.nextPage()}
+                  disabled={!table.getCanNextPage()}
+                  className="text-sm font-semibold px-3 py-1 border-2 dark:border-gray-800 rounded disabled:opacity-50"
+                >
+                  Next
+                </Button>
+              </div>
               <Button
                 onClick={handleFileSelect}
                 className="flex items-center gap-2 mx-auto"
@@ -244,7 +265,7 @@ const DBViewer = ({ initialState }) => {
               </Button>
             </div>
             {/* Tables Sidebar */}
-            <div className="col-span-1 border-r-2 border-t-2 dark:border-gray-800 overflow-y-auto bg-gray-50 dark:bg-black">
+            <div className="col-span-1 border-r-2 border-t-2 dark:border-gray-800 overflow-auto bg-gray-50 dark:bg-black">
               <div className="p-4">
                 <h2 className="font-semibold mb-4 flex items-center gap-2">
                   <TableIcon className="h-4 w-4" />
@@ -252,18 +273,18 @@ const DBViewer = ({ initialState }) => {
                 </h2>
                 <div className="space-y-2">
                   {dbInfo?.tables.map(table => (
-                    <button
+                    <Button
                       key={table.name}
                       onClick={() => handleTableSelect(table.name)}
-                      className={`w-full p-2 text-left rounded hover:bg-gray-100 transition-colors
-                        ${activeTable === table.name ? 'bg-blue-50 border border-blue-200' : ''}
+                      className={`w-full font-normal  p-2 text-left border-2 dark:border-gray-800 rounded hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors
+                        ${activeTable === table.name ? 'bg-blue-50 dark:bg-blue-950 border-2 dark:border-gray-800 border-blue-200' : ''}
                       `}
                     >
-                      <div className="font-medium">{table.name}</div>
-                      <div className="text-xs text-gray-50 dark:text-gray-black0 dark:text-gray-200">
+                      <div className="font-medium truncate">{table.name}</div>
+                      <div className="text-xs text-gray-50 dark:text-gray-50 dark:text-gray-200">
                         {table.rowCount.toLocaleString()} rows
                       </div>
-                    </button>
+                    </Button>
                   ))}
                 </div>
               </div>
@@ -276,32 +297,32 @@ const DBViewer = ({ initialState }) => {
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 dark:border-gray-800 border-blue-500" />
                 </div>
               ) : activeTable ? (
-                <div className="flex-1 flex flex-col min-h-0">
+                <div className="flex-1 flex flex-col min-h-0 relative">
                   {/* Table Header */}
-                  <div className="p-4 border-b flex items-center justify-between bg-white dark:bg-gray-900">
+                  <div className="p-4 border-b-2 dark:border-gray-800 flex items-center justify-between bg-white dark:bg-gray-900">
                     <h3 className="font-semibold text-lg">{activeTable}</h3>
                     {editedCells.size > 0 && (
-                      <button
+                      <Button
                         onClick={handleSaveChanges}
-                        className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 flex items-center gap-2"
+                        className="py-1 px-3 bg-green-500 dark:bg-green-900 border-2 dark:border-green-700 dark:text-green200 text-white rounded hover:bg-green-600 flex items-center gap-2"
                       >
                         <Save className="w-4 h-4" />
-                        Save Changes
-                      </button>
+                        <span className='text-sm'>Save Changes</span>
+                      </Button>
                     )}
                   </div>
 
                   {/* Table Content */}
                   <div className="flex-1 overflow-auto p-4">
-                    <div className="rounded-lg border">
+                    <div className="rounded-lg border-2 dark:border-gray-800">
                       <table className="min-w-full divide-y divide-gray-200">
                         <thead className="bg-gray-50 dark:bg-gray-black">
                           {table.getHeaderGroups().map(headerGroup => (
-                            <tr key={headerGroup.id}>
+                            <tr key={headerGroup.id} className="!border-0">
                               {headerGroup.headers.map(header => (
                                 <th
                                   key={header.id}
-                                  className="px-6 py-3 text-left text-xs font-medium text-gray-50 dark:text-gray-black0 dark:text-gray-200 uppercase tracking-wider"
+                                  className="px-6 py-3 text-left text-xs font-medium text-gray-50 dark:bg-gray-900 dark:text-gray-200 dark:text-gray-200 uppercase tracking-wider"
                                 >
                                   {header.isPlaceholder
                                     ? null
@@ -316,7 +337,7 @@ const DBViewer = ({ initialState }) => {
                         </thead>
                         <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200">
                           {table.getRowModel().rows.map(row => (
-                            <tr key={row.id}>
+                            <tr key={row.id} className='!border-0'>
                               {row.getVisibleCells().map(cell => (
                                 <td
                                   key={cell.id}
@@ -335,27 +356,7 @@ const DBViewer = ({ initialState }) => {
                     </div>
                   </div>
 
-                  {/* Pagination */}
-                  <div className="border-t bg-white dark:bg-gray-900 p-4 flex items-center justify-between">
-                    <button
-                      onClick={() => table.previousPage()}
-                      disabled={!table.getCanPreviousPage()}
-                      className="px-3 py-1 border rounded disabled:opacity-50"
-                    >
-                      Previous
-                    </button>
-                    <span className="text-sm text-gray-600 dark:text-gray-300">
-                      Page {table.getState().pagination.pageIndex + 1} of{" "}
-                      {table.getPageCount()}
-                    </span>
-                    <button
-                      onClick={() => table.nextPage()}
-                      disabled={!table.getCanNextPage()}
-                      className="px-3 py-1 border rounded disabled:opacity-50"
-                    >
-                      Next
-                    </button>
-                  </div>
+
                 </div>
               ) : (
                 <div className="flex-1 flex items-center justify-center text-gray-50 dark:text-gray-black0 dark:text-gray-200">
