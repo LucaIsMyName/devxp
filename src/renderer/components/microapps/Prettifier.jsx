@@ -11,12 +11,15 @@ import { lineNumbers } from '@codemirror/view';
 import { lightTheme } from '../../../config';
 import JsonView from '@uiw/react-json-view';
 import Tooltip from '../partials/Tooltip';
+import Toast from '../partials/Toast';
+import Alert from '../partials/Alert';
 import SelectMenu from '../partials/SelectMenu';
 import useAppStore from '../../store/appStore';
 import prettier from 'prettier/standalone';
 import babelParser from 'prettier/parser-babel';
 import htmlParser from 'prettier/parser-html';
 import cssParser from 'prettier/parser-postcss';
+import { use } from 'marked';
 
 const FORMAT_OPTIONS = [
   { value: 'json', label: 'JSON', views: ['pretty', 'tree'], extension: () => javascript() },
@@ -145,30 +148,15 @@ const Prettifier = ({ initialState }) => {
   const [input, setInput] = useState(savedState.input || '');
   const [output, setOutput] = useState(savedState.output || '');
   const [isLineWrapped, setIsLineWrapped] = useState(savedState.isLineWrapped ?? true);
-
+  const [copiedToClipboard, setCopiedToClipboard] = useState(false);
   const [error, setError] = useState(null);
 
-  // useEffect(() => {
-  //   const loadPrettier = async () => {
-  //     const prettierScript = document.createElement('script');
-  //     prettierScript.src = 'https://unpkg.com/prettier@2.8.8/standalone.js';
-  //     document.head.appendChild(prettierScript);
-
-  //     const parserBabel = document.createElement('script');
-  //     parserBabel.src = 'https://unpkg.com/prettier@2.8.8/parser-babel.js';
-  //     document.head.appendChild(parserBabel);
-
-  //     const parserHtml = document.createElement('script');
-  //     parserHtml.src = 'https://unpkg.com/prettier@2.8.8/parser-html.js';
-  //     document.head.appendChild(parserHtml);
-
-  //     const parserPostcss = document.createElement('script');
-  //     parserPostcss.src = 'https://unpkg.com/prettier@2.8.8/parser-postcss.js';
-  //     document.head.appendChild(parserPostcss);
-  //   };
-
-  //   loadPrettier();
-  // }, []);
+   useEffect(() => {
+    // setCopiedToClipboard(true);
+    setTimeout(() => {
+      setCopiedToClipboard(false);
+    }, 2000);
+  }, [copiedToClipboard]);
 
   // Save state to store whenever it changes
   useEffect(() => {
@@ -270,6 +258,7 @@ const Prettifier = ({ initialState }) => {
 
   // Copy to clipboard function
   const copyToClipboard = async () => {
+    setCopiedToClipboard(true);
     const textToCopy = typeof output === 'string' ? output : JSON.stringify(output, null, 2);
     await navigator.clipboard.writeText(textToCopy);
   };
@@ -355,6 +344,13 @@ const Prettifier = ({ initialState }) => {
 
   return (
     <div data-component="Prettifier" className="h-screen flex flex-col">
+      {
+        copiedToClipboard && (
+          <Toast duration={4000}>
+            <Alert className="py-2" title="Copied" />
+          </Toast>
+        )
+      }
       {/* Header with controls */}
       <div className="flex flex-wrap items-center gap-4 p-4 pb-0">
         <div className="flex flex-wrap items-center gap-4">

@@ -23,16 +23,16 @@ async function createWindow() {
   });
   
   // Add CSP header for security
-  mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
-    callback({
-      responseHeaders: {
-        ...details.responseHeaders,
-        'Content-Security-Policy': [
-          "default-src 'self' 'unsafe-inline' 'unsafe-eval'"
-        ]
-      }
-    });
-  });
+  // mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+  //   callback({
+  //     responseHeaders: {
+  //       ...details.responseHeaders,
+  //       'Content-Security-Policy': [
+  //         "default-src 'self' 'unsafe-inline' 'unsafe-eval' 'data:' 'blob:'",
+  //       ]
+  //     }
+  //   });
+  // });
 
   if (isDev) {
     try {

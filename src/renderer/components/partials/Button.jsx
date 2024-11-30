@@ -14,7 +14,7 @@ const Button = ({ children, title = '', className = '', asLink, href = "", isAct
 
   return (
     asLink === true ?
-      <a data-component="Button" target="_blank" href={href} title={title} className={classNames}>
+      <a data-component="Button" target="_blank" href={href} title={title} className={`${classNames} ${className}`}>
         {children}
       </a>
       :

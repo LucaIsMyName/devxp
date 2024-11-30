@@ -1,7 +1,7 @@
 import { Save, FileWarning, X } from 'lucide-react';
 import { useEffect } from 'react';
 // Custom Alert Component
-const Alert = ({ title, message, variant = 'info', onDismiss }) => {
+const Alert = ({ title, message, variant = 'info', onDismiss, className }) => {
   const bgColor = {
     info: 'bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-200',
     error: 'bg-red-50 dark:bg-red-950 border-red-200 dark:border-red-800 text-red-800 dark:text-red-200',
@@ -9,7 +9,7 @@ const Alert = ({ title, message, variant = 'info', onDismiss }) => {
   }[variant];
 
   return (
-    <div data-component="Alert" className={`p-4 rounded-lg border ${bgColor} relative select-text`}>
+    <div data-component="Alert" className={`p-4 rounded-lg border ${bgColor} relative select-text ${className}`}>
       <div className="flex gap-2 items-start">
         <FileWarning className="h-5 w-5 flex-shrink-0 mt-0.5" />
         <div className="flex-1">

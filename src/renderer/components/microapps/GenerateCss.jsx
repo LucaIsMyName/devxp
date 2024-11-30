@@ -434,7 +434,7 @@ const GenerateCss = () => {
         </div>
       </div>
 
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="Generated Theme">
+      <Modal isOpen={showModal} size="xl" onClose={() => setShowModal(false)} title="Generated Theme">
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <SelectMenu

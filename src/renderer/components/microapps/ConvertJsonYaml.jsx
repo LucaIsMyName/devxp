@@ -64,9 +64,8 @@ const ConvertJsonYaml = () => {
     <div data-component="ConvertJsonYaml" className="h-screen flex flex-col">
       <div className="flex items-center gap-4 p-4 pb-0">
         <Button 
-          variant="outline" 
           onClick={handleSwitch}
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 px-4"
         >
           <span>{direction === 'json-to-yaml' ? 'JSON → YAML' : 'YAML → JSON'}</span>
           <ArrowRightLeft className="h-4 w-4" />

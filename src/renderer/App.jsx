@@ -1,3 +1,4 @@
+// import { scan } from 'react-scan';
 import React, { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { MICRO_APPS } from '../config'
@@ -28,6 +29,13 @@ import ConvertBase64 from './components/microapps/ConvertBase64'
 import GenerateCss from './components/microapps/GenerateCss'
 
 import initSqlJs from 'sql.js';
+
+// if (typeof window !== 'undefined') {
+//   scan({
+//     enabled: true,
+//     log: true, // logs render info to console (default: false)
+//   });
+// }
 
 // In your main app initialization
 // await initSqlJs({

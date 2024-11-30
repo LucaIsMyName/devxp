@@ -1,9 +1,13 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { EditorView } from '@codemirror/view';
 import Button from '../partials/Button';
+import Toast from '../partials/Toast';
+import Alert from '../partials/Alert';
 import { Copy, FileUp, WrapText } from 'lucide-react';
+import { use } from 'marked';
+// import { set } from 'yaml/dist/schema/yaml-1.1/set';
 
 const CodeEditorLayout = ({
   leftTitle,
@@ -18,6 +22,7 @@ const CodeEditorLayout = ({
 }) => {
   const [leftLineWrap, setLeftLineWrap] = useState(true);
   const [rightLineWrap, setRightLineWrap] = useState(true);
+  const [copiedToClipboard, setCopiedToClipboard] = useState(false);
 
   const leftEditorConfig = {
     height: "100%",
@@ -39,12 +44,26 @@ const CodeEditorLayout = ({
     ]
   };
 
+
   const copyToClipboard = async (text) => {
     await navigator.clipboard.writeText(text);
+    setCopiedToClipboard(true);
   };
 
+  useEffect(() => {
+    setTimeout(() => setCopiedToClipboard(false), 2000);
+  }, [copiedToClipboard]);
+
   return (
+
     <div data-component="CodeEditorLayout" className="flex-1 flex flex-col lg:grid lg:grid-cols-2 min-h-0">
+      {
+        copiedToClipboard && (
+          <Toast duration={4000}>
+            <Alert className="py-2" title="Copied" />
+          </Toast>
+        )
+      }
       <div className="h-[50vh] lg:h-full overflow-y-scroll flex flex-col">
         <div className="py-3 pl-4 border-b-2 dark:border-gray-800 border-r-2 dark:border-gray-800 flex justify-between items-center sticky top-0 z-0">
           <h3 className="font-medium text-gray-700 dark:text-gray-200">{leftTitle}</h3>

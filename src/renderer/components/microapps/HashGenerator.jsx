@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Copy, Check } from 'lucide-react';
 import CryptoJS from 'crypto-js';
 import Input from '../partials/Input';
+import Textarea from '../partials/Textarea';
 
 const HashGenerator = () => {
   const [input, setInput] = useState('');
@@ -58,7 +59,7 @@ const HashGenerator = () => {
         <label htmlFor="input" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
           Text to hash
         </label>
-        <textarea
+        <Textarea
           id="input"
           type="text"
           rows={6}

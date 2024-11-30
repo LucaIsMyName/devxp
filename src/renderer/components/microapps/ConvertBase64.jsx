@@ -105,9 +105,8 @@ const ConvertBase64 = () => {
     <div data-component="ConvertBase64" className="h-screen flex flex-col">
       <div className="flex items-center gap-4 p-4 pb-0">
         <Button 
-          variant="outline" 
           onClick={handleSwitch}
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 px-4"
         >
           <span>
             {direction === 'text-to-base64' ? 'Text → Base64' : 'Base64 → Text'}
