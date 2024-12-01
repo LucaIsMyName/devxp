@@ -6,6 +6,7 @@ import Input from "../partials/Input";
 import SelectMenu from "../partials/SelectMenu";
 import Modal from "../partials/Modal";
 import Toast from "../partials/Toast";
+import Toggle from "../partials/Toggle";
 import Alert from "../partials/Alert";
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
@@ -465,7 +466,7 @@ const GenerateCss = () => {
             />
             <div className="flex items-center gap-4">
               <label className="flex items-center gap-2">
-                <input
+                <Toggle
                   type="checkbox"
                   checked={minified}
                   onChange={(e) => setMinified(e.target.checked)}

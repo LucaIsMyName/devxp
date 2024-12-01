@@ -1,4 +1,21 @@
-import { Code2, Palette,Hexagon, Code, AlignLeft, Network, Braces, Hash, Activity, CaseSensitive, SquareMousePointer, Zap, Database, Notebook, ChevronsLeftRightEllipsis } from 'lucide-react';
+import {
+  Code2,
+  Palette,
+  CircleDotDashed,
+  Hexagon,
+  Code,
+  AlignLeft,
+  Network,
+  Braces,
+  Hash,
+  Activity,
+  CaseSensitive,
+  SquareMousePointer,
+  Zap,
+  Database,
+  Notebook,
+  ChevronsLeftRightEllipsis
+} from 'lucide-react';
 import { EditorView } from '@codemirror/view';
 
 
@@ -44,6 +61,13 @@ export const MICRO_APPS = [
     description: 'Convert any strin from or to Base64.',
     component: 'ConvertBase64',
     icon: Hexagon,
+    isActive: true
+  },
+  {
+    name: 'SVG/CSS Converter',
+    description: 'Convert any SVG to CSS and vice-versa.',
+    component: 'ConvertSvgCss',
+    icon: CircleDotDashed,
     isActive: true
   },
   {

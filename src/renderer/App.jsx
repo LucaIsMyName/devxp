@@ -26,6 +26,7 @@ import HashGenerator from './components/microapps/HashGenerator'
 import ConvertJsonYaml from './components/microapps/ConvertJsonYaml'
 import ConvertHtmlJsx from './components/microapps/ConvertHtmlJsx'
 import ConvertBase64 from './components/microapps/ConvertBase64'
+import ConvertSvgCss from './components/microapps/ConvertSvgCss'
 import GenerateCss from './components/microapps/GenerateCss'
 
 import initSqlJs from 'sql.js';
@@ -54,6 +55,7 @@ const COMPONENT_MAP = {
   ConvertString: ConvertString,
   ConvertJsonYaml: ConvertJsonYaml,
   ConvertHtmlJsx: ConvertHtmlJsx,
+  ConvertSvgCss: ConvertSvgCss,
   ConvertBase64: ConvertBase64,
   GenerateCss: GenerateCss
 }

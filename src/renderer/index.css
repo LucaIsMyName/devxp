@@ -32,6 +32,12 @@ input[type="color"] {
     --w-rjv-quotes-color: #9d9d9d;
     --w-rjv-arrow-color: #d4d4d4;
   }
+
+  ::selection {
+    background-color: #ab9cff;
+    color: #000;
+  }
+  
   .cm-gutters {
     background-color: transparent !important;
   }
