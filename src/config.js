@@ -6,6 +6,7 @@ import {
   Code,
   AlignLeft,
   Network,
+  Mail,
   Braces,
   Hash,
   Activity,
@@ -103,6 +104,13 @@ export const MICRO_APPS = [
     description: 'Generate CSS Themes wit Custom Properties and Clkasses on demand',
     component: 'GenerateCss',
     icon: Palette,
+    isActive: true
+  },
+  {
+    name: 'Email Builder',
+    description: "Build Email via Drag and Drop",
+    component: 'EmailBuilder',
+    icon: Mail,
     isActive: true
   },
   {

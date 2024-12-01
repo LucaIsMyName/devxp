@@ -28,6 +28,7 @@ import ConvertHtmlJsx from './components/microapps/ConvertHtmlJsx'
 import ConvertBase64 from './components/microapps/ConvertBase64'
 import ConvertSvgCss from './components/microapps/ConvertSvgCss'
 import GenerateCss from './components/microapps/GenerateCss'
+import EmailBuilder from './components/microapps/EmailBuilder'
 
 import initSqlJs from 'sql.js';
 
@@ -57,7 +58,8 @@ const COMPONENT_MAP = {
   ConvertHtmlJsx: ConvertHtmlJsx,
   ConvertSvgCss: ConvertSvgCss,
   ConvertBase64: ConvertBase64,
-  GenerateCss: GenerateCss
+  GenerateCss: GenerateCss,
+  EmailBuilder: EmailBuilder
 }
 
 
