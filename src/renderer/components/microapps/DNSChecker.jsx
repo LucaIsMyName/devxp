@@ -1,6 +1,6 @@
 import React, { useState, useCallback , useEffect} from 'react';
 import { debounce } from 'lodash';
-import { Download, Globe, FileJson, FileText, Sheet } from 'lucide-react';
+import { Download,View, Globe, FileJson, FileText, Sheet } from 'lucide-react';
 
 import Tooltip from '../partials/Tooltip';
 import SelectMenu from '../partials/SelectMenu';
@@ -205,15 +205,15 @@ ${results.records.map(record => `- ${record.data} (TTL: ${record.TTL})`).join('\
             value={selectedRecordType.value}
             onChange={handleRecordTypeChange}
             tooltip="Select DNS record type"
-            className="w-full lg:w-48 min-w-[160px]"
+            className="w-full lg:w-48 min-w-[160px] lg:min-w-[260px]"
           />
 
           <Button
             type="submit"
             disabled={isLoading || !url}
-            className="w-full lg:w-auto px-3 font-semibold border-[rgba(0,0,0,0.2)] rounded disabled:bg-gray-300 disabled:cursor-not-allowed"
+            className="w-full lg:w-auto px-3 font-semibold border-[rgba(0,0,0,0.2)] bg-blue-600 dark:bg-blue-700 rounded disabled:bg-gray-300 disabled:cursor-not-allowed"
           >
-            {isLoading ? 'Checking...' : 'Check DNS'}
+            {isLoading ? <View /> : <View />}
           </Button>
         </form>
 
@@ -262,11 +262,11 @@ ${results.records.map(record => `- ${record.data} (TTL: ${record.TTL})`).join('\
               {results.records.map((record, index) => (
                 <div
                   key={index}
-                  className="p-4 border-2 dark:border-gray-800 bg-white dark:bg-gray-900 rounded-lg hover:bg-gray-50 dark:bg-gray-black transition-colors"
+                  className="p-4 border-2 dark:border-gray-800 bg-white dark:bg-gray-900 rounded-lg transition-colors"
                 >
                   <div className="sm:flex space-y-1 sm:space-y-0 gap-3 gap-4">
                     <div className="flex-1  text-xs sm:text-base">
-                      <p className="text-gray-50 dark:text-gray-black0 dark:text-gray-200">Name:</p>
+                      <p className="text-gray-50 dark:text-gray-300">Name:</p>
                       <p className="font-mono font-semibold">{record.name}</p>
                     </div>
                     <div className="flex-1 text-xs sm:text-base max-w-64">

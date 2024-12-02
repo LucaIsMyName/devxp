@@ -400,7 +400,7 @@ const Prettifier = ({ initialState }) => {
                     setOutput('');
                     setError(null);
                   }}
-                  className="px-0 py-0 rounded border-0 border-transparent bg-[rgba(0,0,0,0)] shadow-none text-[11px] text-gray-600 dark:text-gray-300 hover:text-gray-900">
+                  className=" rounded text-gray-600 dark:text-gray-300 hover:text-gray-900">
                   <RotateCcw className='size-4' />
                 </Button>
               </Tooltip>
@@ -428,7 +428,7 @@ const Prettifier = ({ initialState }) => {
                   onClick={() => {
                     copyToClipboard();
                   }}
-                  className="px-0 py-0 rounded border-0 border-transparent bg-[rgba(0,0,0,0)] shadow-none text-[11px] text-gray-600 dark:text-gray-300 hover:text-gray-900">
+                  className=" bg-[rgba(0,0,0,0)] shadow-none text-[11px] text-gray-600 dark:text-gray-300 hover:text-gray-900">
                   <Copy className='size-4' />
                 </Button>
               </Tooltip>

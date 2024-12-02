@@ -20,7 +20,7 @@ const proxyUrl = (url) => {
 };
 
 const getFaviconUrl = (domain) => {
-  return `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
+  return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
 };
 
 const WebReader = ({ initialState }) => {
@@ -307,7 +307,7 @@ const WebReader = ({ initialState }) => {
                 href={article.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 dark:text-blue-300 dark:text-blue-600 dark:text-blue-300 dark:text-blue-700 underline"
+                className="text-blue-600 dark:text-blue-300 hover:text-blue-200 underline"
               >
                 {new URL(article.url).hostname + article.url.split(new URL(article.url).hostname)[1]}
               </a>
